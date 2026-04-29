@@ -2,7 +2,7 @@ const GAMES_DATA = [
     {
         id: "0",
         title: "Ruffle Demo",
-        image: "https://f-droid.org/packages/rs.ruffle/",
+        image: "https://f-droid.org/repo/rs.ruffle/en-US/icon_bQ_yOJtIW_1yIHpvXy6Y1s9nmS_2ZPXbqXO6yJna6b8=.png",
         url: "https://ruffle.rs/demo/",
         source: "https://github.com/ruffle-rs/ruffle"
     },
