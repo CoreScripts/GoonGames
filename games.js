@@ -1,4 +1,4 @@
-const GAMES_DATA = [
+var GAMES_DATA = [
     {
         id: "2048",
         title: "2048",
