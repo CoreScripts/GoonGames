@@ -1,5 +1,3 @@
-// This file holds the list of games. 
-// The 'const' name must match what is used in script.js
 const GAMES_DATA = [
     {
         id: "2048",
