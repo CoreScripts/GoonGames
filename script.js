@@ -3,6 +3,29 @@ const homeView = document.getElementById('homeView');
 const playerView = document.getElementById('playerView');
 const gameIframe = document.getElementById('gameIframe');
 const activeTitle = document.getElementById('activeGameTitle');
+const themeToggle = document.getElementById('themeToggle');
+const htmlElement = document.documentElement;
+
+// Function to apply theme
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        htmlElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        htmlElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+// Initial Theme Check
+const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark
+applyTheme(savedTheme);
+
+// Toggle Listener
+themeToggle.onclick = () => {
+    const isDark = htmlElement.classList.contains('dark');
+    applyTheme(isDark ? 'light' : 'dark');
+};
 
 // 1. Render Games
 function loadGames() {
