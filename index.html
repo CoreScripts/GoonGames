@@ -6,19 +6,27 @@
     <title>GoonGames REMAKE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+
     <script src="games.js"></script>
 
     <style>
         /* Smooth Global Transitions */
-        * { transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease; }
+        * { 
+            transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease !important; 
+        }
         
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
 
-        /* The Toggle Ball Movement - Logic: translateX(0) is light, translateX(24px) is dark */
+        /* The Toggle Ball Movement */
         #toggleCircle { 
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
             transform: translateX(0px); 
         }
         .dark #toggleCircle { 
@@ -64,7 +72,7 @@
             <div class="flex flex-col items-center gap-4 mb-8">
                 <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Toggle Appearance</span>
                 
-                <button id="themeToggle" class="relative w-14 h-8 bg-zinc-200 dark:bg-blue-600 rounded-full p-1 transition-colors duration-500 cursor-pointer">
+                <button id="themeToggle" class="relative w-14 h-8 bg-zinc-200 dark:bg-blue-600 rounded-full p-1 transition-colors duration-500 cursor-pointer focus:outline-none">
                     <div id="toggleCircle" class="w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center pointer-events-none">
                         <svg id="sunIcon" class="w-4 h-4 text-yellow-500 dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
                         <svg id="moonIcon" class="w-4 h-4 text-blue-500 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
@@ -77,14 +85,12 @@
     </div>
 
     <script>
-        // Selectors
         const grid = document.getElementById('gameGrid');
         const home = document.getElementById('homeView');
         const player = document.getElementById('playerView');
         const iframe = document.getElementById('gameIframe');
         const activeTitle = document.getElementById('activeGameTitle');
 
-        // Initializer
         function init() {
             // Render Games from games.js
             if (typeof GAMES_DATA !== 'undefined') {
@@ -96,16 +102,26 @@
                         <h3 class="font-bold text-[10px] uppercase tracking-widest opacity-60 group-hover:opacity-100 group-hover:text-blue-500 transition-all">${game.title}</h3>
                     </div>
                 `).join('');
-            } else {
-                console.error("GAMES_DATA not loaded. Ensure games.js is linked correctly.");
             }
 
-            // Apply Theme on Load
+            // Apply saved theme preference
             const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.className = savedTheme;
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
         }
 
-        // Logic Functions
+        // Toggle Theme logic
+        document.getElementById('themeToggle').onclick = function() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            
+            const isDark = html.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        };
+
         window.playGame = function(id) {
             const game = GAMES_DATA.find(g => g.id === id);
             if (!game) return;
@@ -117,25 +133,14 @@
         };
 
         document.getElementById('closePlayer').onclick = () => {
-            iframe.src = ""; // Stops game/saves RAM
+            iframe.src = ""; 
             player.classList.add('hidden');
             home.classList.remove('hidden');
         };
 
-        // Settings Controls
         document.getElementById('settingsBtn').onclick = () => document.getElementById('settingsModal').classList.remove('hidden');
         document.getElementById('closeSettings').onclick = () => document.getElementById('settingsModal').classList.add('hidden');
 
-        // Toggle Event Listener
-        document.getElementById('themeToggle').onclick = function() {
-            const html = document.documentElement;
-            const newTheme = html.classList.contains('dark') ? 'light' : 'dark';
-            
-            html.className = newTheme; // Force redraw for Tailwind
-            localStorage.setItem('theme', newTheme);
-        };
-
-        // Fire once DOM is ready
         window.onload = init;
     </script>
 </body>
