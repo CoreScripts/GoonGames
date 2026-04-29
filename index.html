@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoonGames REMAKE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 transition-colors duration-300">
+
+    <nav class="sticky top-0 z-40 w-full bg-zinc-100 dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-baseline gap-2">
+            <h1 class="text-2xl font-black tracking-tighter">GoonGames</h1>
+            <span class="text-xs font-light opacity-60">REMAKE</span>
+        </div>
+        <button id="settingsBtn" class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full transition">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+    </nav>
+
+    <main id="homeView" class="max-w-7xl mx-auto p-6">
+        <div id="gameGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            </div>
+    </main>
+
+    <section id="playerView" class="hidden fixed inset-0 z-50 bg-black flex flex-col">
+        <div class="p-4 bg-zinc-900 flex justify-between items-center text-white">
+            <h2 id="activeGameTitle" class="font-bold">Game Title</h2>
+            <button id="closePlayer" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg font-medium transition">Close Game</button>
+        </div>
+        
+        <div class="flex-grow bg-zinc-800">
+            <iframe id="gameIframe" src="" class="w-full h-full border-0"></iframe>
+        </div>
+
+        <div class="p-4 bg-zinc-900 flex gap-4 justify-center items-center border-t border-zinc-800">
+            <button id="fsBtn" class="bg-zinc-700 px-4 py-2 rounded hover:bg-zinc-600 text-sm">Fullscreen</button>
+            <button id="tabBtn" class="bg-zinc-700 px-4 py-2 rounded hover:bg-zinc-600 text-sm">New Tab</button>
+            <a id="sourceBtn" target="_blank" class="bg-zinc-700 px-4 py-2 rounded hover:bg-zinc-600 text-sm">View Source</a>
+        </div>
+    </section>
+
+    <div id="settingsModal" class="hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-zinc-800 p-8 rounded-2xl w-full max-w-md shadow-2xl">
+            <h2 class="text-xl font-bold mb-6">Settings</h2>
+            <div class="flex items-center justify-between mb-8">
+                <span>Light Mode</span>
+                <button id="themeToggle" class="w-12 h-6 bg-zinc-300 dark:bg-blue-600 rounded-full relative transition">
+                    <div class="absolute top-1 left-1 dark:left-7 w-4 h-4 bg-white rounded-full transition-all"></div>
+                </button>
+            </div>
+            <button id="closeSettings" class="w-full py-3 bg-zinc-200 dark:bg-zinc-700 rounded-xl font-bold">Done</button>
+        </div>
+    </div>
+
+    <script src="games.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
