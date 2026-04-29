@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark no-transition">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+
         tailwind.config = {
             darkMode: 'class',
         }
@@ -15,13 +24,7 @@
     <script src="games.js"></script>
 
     <style>
-        /* Block transitions on load to prevent "flash" or sliding on refresh */
-        .no-transition *, 
-        .no-transition {
-            transition: none !important;
-        }
-
-        /* Targeted transitions for theme swapping */
+        /* Smooth Global Transitions */
         html, body, nav, section, div, h1, h2, h3, span, button {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
@@ -30,16 +33,16 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
 
+        /* Optimized Ball Slide */
         #toggleCircle { 
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateX(0px); 
         }
-        
         .dark #toggleCircle { 
             transform: translateX(24px); 
         }
 
-        /* Icon Visibility */
+        /* Icon Visibility Control */
         .sun-visible { display: block; }
         .moon-visible { display: none; }
         .dark .sun-visible { display: none; }
@@ -62,17 +65,19 @@
         <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
     </main>
 
-    <section id="playerView" class="hidden fixed inset-0 z-50 bg-white dark:bg-zinc-950 flex flex-col">
-        <div class="p-4 bg-zinc-100 dark:bg-zinc-900 flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800">
+    <section id="playerView" class="hidden fixed inset-0 z-50 bg-zinc-100 dark:bg-black flex flex-col">
+        <div class="p-4 bg-white dark:bg-zinc-900 flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800">
             <h2 id="activeGameTitle" class="font-bold text-zinc-900 dark:text-white uppercase tracking-widest text-sm">Game Title</h2>
             <button id="closePlayer" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold transition-all active:scale-95 text-xs uppercase">Close</button>
         </div>
-        <div class="flex-grow relative bg-zinc-200 dark:bg-black">
+        
+        <div class="flex-grow relative bg-zinc-200 dark:bg-zinc-950">
             <iframe id="gameIframe" src="" class="w-full h-full border-0 absolute inset-0" allowfullscreen></iframe>
         </div>
-        <div class="p-3 bg-zinc-100 dark:bg-zinc-900 flex gap-4 justify-center">
-            <button onclick="document.getElementById('gameIframe').requestFullscreen()" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 text-[10px] font-bold uppercase tracking-widest">Fullscreen</button>
-            <button id="tabBtn" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 text-[10px] font-bold uppercase tracking-widest">New Tab</button>
+        
+        <div class="p-3 bg-white dark:bg-zinc-900 flex gap-6 justify-center border-t border-zinc-200 dark:border-zinc-800">
+            <button onclick="document.getElementById('gameIframe').requestFullscreen()" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-white text-[10px] font-bold uppercase tracking-widest">Fullscreen</button>
+            <button id="tabBtn" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-white text-[10px] font-bold uppercase tracking-widest">New Tab</button>
         </div>
     </section>
 
@@ -101,7 +106,6 @@
         const activeTitle = document.getElementById('activeGameTitle');
 
         function init() {
-            // Render Games
             if (typeof GAMES_DATA !== 'undefined') {
                 grid.innerHTML = GAMES_DATA.map(game => `
                     <div class="group cursor-pointer" onclick="playGame('${game.id}')">
@@ -112,15 +116,6 @@
                     </div>
                 `).join('');
             }
-
-            // Sync theme on load without animation
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-
-            // ENABLE TRANSITIONS: Remove the blocking class after initial paint
-            setTimeout(() => {
-                document.documentElement.classList.remove('no-transition');
-            }, 100);
         }
 
         document.getElementById('themeToggle').onclick = function() {
