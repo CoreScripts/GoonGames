@@ -1,0 +1,14 @@
+/* Smoothly transition background and text colors */
+* {
+    transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+}
+
+/* Ensure the game player overlay is always dark/black regardless of theme */
+#playerView {
+    background-color: #000 !important;
+}
+
+/* Prevent transitions on the iframe itself to avoid flicker */
+iframe {
+    transition: none !important;
+}
