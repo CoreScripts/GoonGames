@@ -6,109 +6,115 @@
     <title>GoonGames REMAKE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* This forces the toggle movement regardless of Tailwind bugs */
-        .toggle-dot { transition: transform 0.3s ease-in-out; transform: translateX(0px); }
-        .dark .toggle-dot { transform: translateX(32px); }
+        /* Smooth transitions for the whole site */
         * { transition: background-color 0.3s ease, color 0.3s ease; }
+        
+        /* The Toggle Ball Animation */
+        #toggleBall {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(0px);
+        }
+        .dark #toggleBall {
+            transform: translateX(32px);
+        }
     </style>
 </head>
 <body class="bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen">
 
     <nav class="p-4 border-b border-zinc-200 dark:border-zinc-800 flex justify-between items-center sticky top-0 bg-white dark:bg-zinc-900 z-40">
         <h1 class="font-black text-xl uppercase tracking-tighter">GoonGames <span class="text-blue-600 text-xs">REMAKE</span></h1>
-        <button id="settingsBtn" class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-lg">⚙️</button>
+        <button id="settingsBtn" class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-lg text-xl">⚙️</button>
     </nav>
 
     <main class="p-6 max-w-7xl mx-auto">
         <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            <p id="loadingText" class="col-span-full text-center opacity-50">Searching for games.js...</p>
+            <p id="status" class="col-span-full text-center py-10 opacity-50 font-mono text-sm">Initializing system...</p>
         </div>
     </main>
 
     <div id="playerView" class="hidden fixed inset-0 z-50 bg-black flex flex-col">
         <div class="p-4 flex justify-between items-center bg-zinc-900 text-white">
-            <span id="activeTitle" class="font-bold uppercase text-sm tracking-widest"></span>
-            <button onclick="closeGame()" class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-full font-black text-xs">CLOSE</button>
+            <span id="activeTitle" class="font-bold uppercase text-xs tracking-widest"></span>
+            <button onclick="closeGame()" class="bg-red-600 px-6 py-2 rounded-full font-black text-[10px]">CLOSE GAME</button>
         </div>
-        <iframe id="gameIframe" class="flex-grow w-full h-full border-0 bg-black"></iframe>
+        <iframe id="gameIframe" class="flex-grow w-full h-full border-0 bg-black" allowfullscreen></iframe>
     </div>
 
-    <div id="settingsModal" class="hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div id="settingsModal" class="hidden fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white dark:bg-zinc-800 p-8 rounded-3xl w-full max-w-xs shadow-2xl border border-zinc-200 dark:border-zinc-700">
-            <h2 class="font-black text-center mb-8 uppercase tracking-widest">Settings</h2>
+            <h2 class="font-black text-center mb-8 uppercase text-lg">Settings</h2>
             
             <div class="flex flex-col items-center gap-4">
-                <span class="text-[10px] font-bold opacity-50 uppercase">Appearance</span>
-                <button id="themeToggle" class="w-16 h-8 bg-zinc-300 dark:bg-blue-600 rounded-full p-1 relative transition-colors">
-                    <div class="toggle-dot w-6 h-6 bg-white rounded-full shadow flex items-center justify-center text-[10px]">
+                <span class="text-[10px] font-bold opacity-40 uppercase tracking-widest">Theme Switcher</span>
+                
+                <div id="themeToggle" class="w-16 h-8 bg-zinc-200 dark:bg-blue-600 rounded-full p-1 cursor-pointer flex items-center transition-colors">
+                    <div id="toggleBall" class="w-6 h-6 bg-white rounded-full shadow-lg flex items-center justify-center text-[10px]">
                         <span class="dark:hidden">☀️</span>
                         <span class="hidden dark:inline">🌙</span>
                     </div>
-                </button>
+                </div>
             </div>
 
-            <button onclick="document.getElementById('settingsModal').classList.add('hidden')" class="mt-8 w-full py-3 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl font-bold">DONE</button>
+            <button onclick="document.getElementById('settingsModal').classList.add('hidden')" class="mt-8 w-full py-4 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-2xl font-bold active:scale-95 transition-transform uppercase text-xs tracking-widest">Close Menu</button>
         </div>
     </div>
 
-    <script src="./games.js"></script>
+    <script src="games.js"></script>
 
     <script>
         const grid = document.getElementById('gameGrid');
-        const player = document.getElementById('playerView');
-        const iframe = document.getElementById('gameIframe');
-        const activeTitle = document.getElementById('activeTitle');
-        const settingsModal = document.getElementById('settingsModal');
+        const status = document.getElementById('status');
+        const themeToggle = document.getElementById('themeToggle');
 
-        // 1. Initialize Grid
-        function initGrid() {
+        // 1. DATA LOADER (Retries every 500ms if games.js hasn't loaded yet)
+        let attempts = 0;
+        function loadGames() {
             if (typeof GAMES_DATA !== 'undefined') {
                 grid.innerHTML = GAMES_DATA.map(game => `
                     <div onclick="openGame('${game.url}', '${game.title}')" class="group cursor-pointer">
                         <div class="aspect-video bg-zinc-200 dark:bg-zinc-800 rounded-2xl overflow-hidden mb-2 border-2 border-transparent group-hover:border-blue-500 transition-all shadow-md">
-                            <img src="${game.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <img src="${game.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         </div>
-                        <p class="text-[10px] font-bold opacity-60 uppercase tracking-widest group-hover:opacity-100 group-hover:text-blue-500">${game.title}</p>
+                        <p class="text-[10px] font-bold opacity-50 uppercase tracking-widest group-hover:opacity-100 group-hover:text-blue-500">${game.title}</p>
                     </div>
                 `).join('');
+            } else if (attempts < 10) {
+                attempts++;
+                status.innerText = "Connecting to database... (Attempt " + attempts + ")";
+                setTimeout(loadGames, 500);
             } else {
-                document.getElementById('loadingText').innerText = "Error: games.js not found in this folder.";
+                status.innerHTML = "<span class='text-red-500'>CRITICAL ERROR: games.js not found. Check file placement in GitHub.</span>";
             }
         }
 
-        // 2. Player Logic
-        window.openGame = function(url, title) {
-            activeTitle.innerText = title;
-            iframe.src = url;
-            player.classList.remove('hidden');
+        // 2. THEME LOGIC
+        themeToggle.onclick = () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('userTheme', isDark ? 'dark' : 'light');
         };
 
-        window.closeGame = function() {
-            iframe.src = ""; // RAM Saver
-            player.classList.add('hidden');
-        };
-
-        // 3. Settings & Theme
-        document.getElementById('settingsBtn').onclick = () => settingsModal.classList.remove('hidden');
-
-        document.getElementById('themeToggle').onclick = () => {
-            const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            }
-        };
-
-        // On Load
-        if (localStorage.getItem('theme') === 'light') {
+        // Load saved preference
+        if (localStorage.getItem('userTheme') === 'light') {
             document.documentElement.classList.remove('dark');
         }
-        
-        // Short delay to ensure games.js is parsed
-        setTimeout(initGrid, 100);
+
+        // 3. UI & PLAYER
+        document.getElementById('settingsBtn').onclick = () => document.getElementById('settingsModal').classList.remove('hidden');
+
+        window.openGame = (url, title) => {
+            document.getElementById('activeTitle').innerText = title;
+            document.getElementById('gameIframe').src = url;
+            document.getElementById('playerView').classList.remove('hidden');
+        };
+
+        window.closeGame = () => {
+            document.getElementById('gameIframe').src = "";
+            document.getElementById('playerView').classList.add('hidden');
+        };
+
+        // Run loader
+        loadGames();
     </script>
 </body>
 </html>
