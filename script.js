@@ -1,3 +1,33 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlElement = document.documentElement;
+
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            htmlElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            htmlElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+        console.log("Current theme:", theme);
+    }
+
+    // Load saved theme or default to dark
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(savedTheme);
+
+    // Toggle click event
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const isDark = htmlElement.classList.contains('dark');
+            applyTheme(isDark ? 'light' : 'dark');
+        });
+    } else {
+        console.error("Theme toggle button not found!");
+    }
+});
+
 const gameGrid = document.getElementById('gameGrid');
 const homeView = document.getElementById('homeView');
 const playerView = document.getElementById('playerView');
