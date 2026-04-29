@@ -5,17 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GoonGames REMAKE</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="games.js"></script>
+
     <style>
-        /* Smooth transitions for theme switching */
         * { transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
-        
-        /* Custom scrollbar for a cleaner look */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
-
-        /* Prevent the iframe from eating RAM when hidden */
-        .hidden-iframe { display: none; visibility: hidden; }
     </style>
 </head>
 <body class="bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen font-sans">
@@ -36,117 +33,85 @@
     </main>
 
     <section id="playerView" class="hidden fixed inset-0 z-50 bg-black flex flex-col">
-        <div class="p-4 bg-zinc-900 flex justify-between items-center">
-            <h2 id="activeGameTitle" class="font-bold text-white uppercase tracking-widest">Game Title</h2>
-            <button id="closePlayer" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold transition-all active:scale-95 shadow-lg shadow-red-900/20">CLOSE</button>
+        <div class="p-4 bg-zinc-900 flex justify-between items-center border-b border-zinc-800">
+            <h2 id="activeGameTitle" class="font-bold text-white uppercase tracking-widest text-sm">Game Title</h2>
+            <button id="closePlayer" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold transition-all active:scale-95 text-xs">CLOSE</button>
         </div>
         <div class="flex-grow relative bg-zinc-950">
             <iframe id="gameIframe" src="" class="w-full h-full border-0 absolute inset-0" allowfullscreen></iframe>
         </div>
-        <div class="p-4 bg-zinc-900 flex gap-4 justify-center">
-            <button onclick="toggleFullscreen()" class="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded text-xs font-bold uppercase">Fullscreen</button>
-            <button id="tabBtn" class="bg-zinc-800 hover:bg-zinc-700 px-4 py-2 rounded text-xs font-bold uppercase">New Tab</button>
+        <div class="p-3 bg-zinc-900 flex gap-4 justify-center">
+            <button onclick="document.getElementById('gameIframe').requestFullscreen()" class="text-zinc-400 hover:text-white text-[10px] font-bold uppercase tracking-widest">Fullscreen</button>
+            <button id="tabBtn" class="text-zinc-400 hover:text-white text-[10px] font-bold uppercase tracking-widest">Open in New Tab</button>
         </div>
     </section>
 
     <div id="settingsModal" class="hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-zinc-800 p-8 rounded-3xl w-full max-w-sm border border-zinc-200 dark:border-zinc-700 shadow-2xl">
-            <h2 class="text-2xl font-black mb-6 text-center">SETTINGS</h2>
-            
+        <div class="bg-white dark:bg-zinc-800 p-8 rounded-3xl w-full max-w-sm border border-zinc-200 dark:border-zinc-700">
+            <h2 class="text-xl font-black mb-6 text-center uppercase">Settings</h2>
             <div class="flex flex-col items-center gap-4 mb-8">
-                <span class="text-xs font-bold opacity-50 uppercase">Appearance</span>
-                
-                <button id="themeToggle" class="relative w-20 h-10 bg-zinc-200 dark:bg-blue-600 rounded-full p-1 transition-all duration-500 cursor-pointer overflow-hidden">
+                <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Toggle Appearance</span>
+                <button id="themeToggle" class="relative w-20 h-10 bg-zinc-200 dark:bg-blue-600 rounded-full p-1 transition-all duration-500">
                     <div id="toggleCircle" class="absolute left-1 top-1 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center transition-all duration-500 transform dark:translate-x-10">
                         <svg id="sunIcon" class="w-5 h-5 text-yellow-500 dark:hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
                         <svg id="moonIcon" class="w-5 h-5 text-blue-500 hidden dark:block" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
                     </div>
                 </button>
             </div>
-
-            <button id="closeSettings" class="w-full py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-xl font-bold transition hover:opacity-90">DONE</button>
+            <button id="closeSettings" class="w-full py-3 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl font-bold transition hover:scale-95">DONE</button>
         </div>
     </div>
 
     <script>
-        /** 1. DATA **/
-        const GAMES = [
-            {
-                id: "2048",
-                title: "2048",
-                image: "https://images.unsplash.com/photo-1614332287897-cdc485fa562d?w=400&h=250&fit=crop",
-                url: "https://play2048.co/"
-            },
-            {
-                id: "ruffle",
-                title: "Flash Emulator",
-                image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=250&fit=crop",
-                url: "https://ruffle.rs/demo/"
-            }
-            // Add more here!
-        ];
-
-        /** 2. SELECTORS **/
+        // ENGINE LOGIC
         const grid = document.getElementById('gameGrid');
         const home = document.getElementById('homeView');
         const player = document.getElementById('playerView');
         const iframe = document.getElementById('gameIframe');
         const activeTitle = document.getElementById('activeGameTitle');
-        const settingsModal = document.getElementById('settingsModal');
-        const themeToggle = document.getElementById('themeToggle');
 
-        /** 3. CORE LOGIC **/
         function init() {
-            // Render the grid
-            grid.innerHTML = GAMES.map(game => `
-                <div class="group cursor-pointer" onclick="playGame('${game.id}')">
-                    <div class="aspect-video bg-zinc-200 dark:bg-zinc-800 rounded-2xl overflow-hidden mb-3 border-2 border-transparent group-hover:border-blue-500 shadow-md transition-all">
-                        <img src="${game.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+            // Check if GAMES_DATA exists from games.js
+            if (typeof GAMES_DATA !== 'undefined') {
+                grid.innerHTML = GAMES_DATA.map(game => `
+                    <div class="group cursor-pointer" onclick="playGame('${game.id}')">
+                        <div class="aspect-video bg-zinc-200 dark:bg-zinc-800 rounded-2xl overflow-hidden mb-3 border-2 border-transparent group-hover:border-blue-500 shadow-lg transition-all transform group-hover:-translate-y-1">
+                            <img src="${game.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <h3 class="font-bold text-[10px] uppercase tracking-widest opacity-60 group-hover:opacity-100 group-hover:text-blue-500 transition-all">${game.title}</h3>
                     </div>
-                    <h3 class="font-bold text-xs uppercase tracking-tighter opacity-80 group-hover:opacity-100 group-hover:text-blue-500 transition-all">${game.title}</h3>
-                </div>
-            `).join('');
+                `).join('');
+            }
 
-            // Load saved theme
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.className = savedTheme;
+            // Theme setup
+            document.documentElement.className = localStorage.getItem('theme') || 'dark';
         }
 
         function playGame(id) {
-            const game = GAMES.find(g => g.id === id);
+            const game = GAMES_DATA.find(g => g.id === id);
             if (!game) return;
-
             activeTitle.innerText = game.title;
-            iframe.src = game.url; // Load the game
-            
+            iframe.src = game.url;
             document.getElementById('tabBtn').onclick = () => window.open(game.url, '_blank');
-            
             home.classList.add('hidden');
             player.classList.remove('hidden');
         }
 
         document.getElementById('closePlayer').onclick = () => {
-            iframe.src = ""; // STOPS THE GAME & SAVES RAM
+            iframe.src = ""; // RAM SAVER: Kills the game process
             player.classList.add('hidden');
             home.classList.remove('hidden');
         };
 
-        function toggleFullscreen() {
-            if (iframe.requestFullscreen) iframe.requestFullscreen();
-        }
-
-        /** 4. SETTINGS & THEME **/
-        document.getElementById('settingsBtn').onclick = () => settingsModal.classList.remove('hidden');
-        document.getElementById('closeSettings').onclick = () => settingsModal.classList.add('hidden');
-
-        themeToggle.onclick = () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            const newTheme = isDark ? 'light' : 'dark';
+        // UI Handlers
+        document.getElementById('settingsBtn').onclick = () => document.getElementById('settingsModal').classList.remove('hidden');
+        document.getElementById('closeSettings').onclick = () => document.getElementById('settingsModal').classList.add('hidden');
+        document.getElementById('themeToggle').onclick = () => {
+            const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
             document.documentElement.className = newTheme;
             localStorage.setItem('theme', newTheme);
         };
 
-        // Run on load
         init();
     </script>
 </body>
