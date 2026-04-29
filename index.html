@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script>
+        // 1. IMMEDIATE THEME CHECK (No Flicker)
         (function() {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             if (savedTheme === 'dark') {
@@ -24,7 +25,16 @@
     <script src="games.js"></script>
 
     <style>
-        /* Smooth Global Transitions */
+        /* 2. DISABLE TRANSITIONS ON LOAD */
+        .preload * {
+            -webkit-transition: none !important;
+            -moz-transition: none !important;
+            -ms-transition: none !important;
+            -o-transition: none !important;
+            transition: none !important;
+        }
+
+        /* Smooth Global Transitions (Active only after load) */
         html, body, nav, section, div, h1, h2, h3, span, button {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
@@ -33,7 +43,6 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
 
-        /* Optimized Ball Slide */
         #toggleCircle { 
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateX(0px); 
@@ -42,14 +51,13 @@
             transform: translateX(24px); 
         }
 
-        /* Icon Visibility Control */
         .sun-visible { display: block; }
         .moon-visible { display: none; }
         .dark .sun-visible { display: none; }
         .dark .moon-visible { display: block; }
     </style>
 </head>
-<body class="bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen font-sans">
+<body class="preload bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen font-sans">
 
     <nav class="sticky top-0 z-40 w-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-700 px-6 py-4 flex justify-between items-center">
         <div class="flex items-baseline gap-2">
@@ -70,11 +78,9 @@
             <h2 id="activeGameTitle" class="font-bold text-zinc-900 dark:text-white uppercase tracking-widest text-sm">Game Title</h2>
             <button id="closePlayer" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold transition-all active:scale-95 text-xs uppercase">Close</button>
         </div>
-        
         <div class="flex-grow relative bg-zinc-200 dark:bg-zinc-950">
             <iframe id="gameIframe" src="" class="w-full h-full border-0 absolute inset-0" allowfullscreen></iframe>
         </div>
-        
         <div class="p-3 bg-white dark:bg-zinc-900 flex gap-6 justify-center border-t border-zinc-200 dark:border-zinc-800">
             <button onclick="document.getElementById('gameIframe').requestFullscreen()" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-white text-[10px] font-bold uppercase tracking-widest">Fullscreen</button>
             <button id="tabBtn" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-white text-[10px] font-bold uppercase tracking-widest">New Tab</button>
@@ -86,7 +92,6 @@
             <h2 class="text-xl font-black mb-6 text-center uppercase tracking-tighter">Settings</h2>
             <div class="flex flex-col items-center gap-4 mb-8">
                 <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Toggle Appearance</span>
-                
                 <button id="themeToggle" class="relative w-14 h-8 bg-zinc-200 dark:bg-blue-600 rounded-full p-1 transition-colors duration-300 cursor-pointer focus:outline-none">
                     <div id="toggleCircle" class="w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center pointer-events-none">
                         <svg class="sun-visible w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
@@ -106,6 +111,9 @@
         const activeTitle = document.getElementById('activeGameTitle');
 
         function init() {
+            // 4. REMOVE PRELOAD CLASS (Enables transitions only after page is ready)
+            document.body.classList.remove('preload');
+
             if (typeof GAMES_DATA !== 'undefined') {
                 grid.innerHTML = GAMES_DATA.map(game => `
                     <div class="group cursor-pointer" onclick="playGame('${game.id}')">
