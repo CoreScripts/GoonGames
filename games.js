@@ -18,3 +18,5 @@ var GAMES_DATA = [
         url: "https://precisionclient.vercel.app/" 
     }
 ];
+// This confirms the file is actually being read
+console.log("Data source initialized.");
