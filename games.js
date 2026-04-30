@@ -36,7 +36,7 @@ const GAMES_DATA = [
     {
         id: "4",
         title: "Geometry Dash",
-        image: proxy("https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/322170/header.jpg"),
+        image: proxy("https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/322170/capsule_616x353.jpg?t=1775300400"),
         url: "games/loader.html?url=https://gamingshitposting.github.io/ext-bin-1/geometrylite.io/game/geometry-dash-full-version/index.html"
     }
 ];
