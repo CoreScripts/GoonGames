@@ -6,34 +6,59 @@
     <title>GoonGames Loader</title>
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     <style>
-        body, html { margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden; background: #000; }
-        iframe, #ruffle-container { width: 100%; height: 100%; border: none; }
+        /* This ensures the entire page is used */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100vh; 
+            width: 100vw; 
+            overflow: hidden; 
+            background: #000; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* This forces the Ruffle Player element itself to fill the container */
+        #ruffle-container, ruffle-player {
+            width: 100%;
+            height: 100%;
+        }
+
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
-    <iframe id="game-frame" style="display:none;" allow="autoplay; fullscreen; focus-without-user-activation" sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-scripts allow-same-origin" allowfullscreen></iframe>
+    <iframe id="game-frame" style="display:none;" allow="autoplay; fullscreen" allowfullscreen></iframe>
 
     <div id="ruffle-container" style="display:none;"></div>
 
     <script>
         const params = new URLSearchParams(window.location.search);
-        const gameUrl = decodeURIComponent(params.get('url'));
+        const gameUrl = params.get('url');
         const iframe = document.getElementById('game-frame');
         const container = document.getElementById('ruffle-container');
 
         if (gameUrl) {
-            // Check if the URL ends in .swf
-            if (gameUrl.toLowerCase().endsWith('.swf')) {
-                // FLASH MODE
+            const decodedUrl = decodeURIComponent(gameUrl);
+            
+            if (decodedUrl.toLowerCase().endsWith('.swf')) {
                 container.style.display = "block";
                 const ruffle = window.RufflePlayer.newest();
                 const player = ruffle.createPlayer();
+                
                 container.appendChild(player);
-                player.load(gameUrl);
+
+                // This config forces the game to scale nicely to the screen
+                player.load({
+                    url: decodedUrl,
+                    allowScriptAccess: true,
+                    backgroundColor: "#000000",
+                    letterbox: "on" 
+                });
             } else {
-                // REGULAR IFRAME MODE
                 iframe.style.display = "block";
-                iframe.src = gameUrl;
+                iframe.src = decodedUrl;
             }
         }
     </script>
