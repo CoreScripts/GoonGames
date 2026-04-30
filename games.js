@@ -54,7 +54,7 @@ const GAMES_DATA = [
     {
         id: "7",
         title: "Dino Run DX",
-        image: proxy("https://img.itch.zone/aW1hZ2UvMjIyMDk1LzEwNTA0NzQucG5n/original/leNXVj.png"),
+        image: proxy("https://cdn15.idcgames.com/storage/image/1243/thumb_slider/default.jpg"),
         url: "games/loader.html?url=games/dino-run.swf"
     }
 ];
