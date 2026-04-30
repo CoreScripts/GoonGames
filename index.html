@@ -7,16 +7,14 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="GOONGAMES">
     
     <link id="tabIcon" rel="icon" type="image/png" href="droplet.png">
     <link rel="apple-touch-icon" href="droplet.png">
-    <link rel="manifest" href="data:application/manifest+json,{'name':'GOONGAMES','short_name':'GOONGAMES','start_url':'index.html','display':'standalone','background_color':'#09090b','theme_color':'#3b82f6','icons':[{'src':'droplet.png','sizes':'192x192','type':'image/png'}]}">
 
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script>
-        // 1. CLOAK & THEME CHECK (Immediate)
+        // 1. CLOAK & THEME CHECK (Immediate execution to prevent flash)
         (function() {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             if (savedTheme === 'dark') document.documentElement.classList.add('dark');
@@ -25,7 +23,6 @@
             const cloakIcon = localStorage.getItem('cloakIcon');
             if (cloakTitle) document.title = cloakTitle;
             if (cloakIcon) {
-                // Apply immediately if exists
                 const link = document.createElement('link');
                 link.id = 'tabIcon';
                 link.rel = 'icon';
@@ -35,21 +32,18 @@
         })();
 
         tailwind.config = { darkMode: 'class' }
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW failed', err));
-            });
-        }
     </script>
 
     <script src="games.js"></script>
 
     <style>
         .preload * { transition: none !important; }
-        html, body, nav, section, div, h1, h2, h3, span, button, input {
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-        }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow-x: hidden; }
+        
+        /* THE FIX: Force the iframe container to be a strict flex-grow parent */
+        #playerView { display: none; }
+        #playerView.active { display: flex; flex-direction: column; }
+
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
@@ -59,26 +53,20 @@
 
         .sun-visible { display: block; } .moon-visible { display: none; }
         .dark .sun-visible { display: none; } .dark .moon-visible { display: block; }
-
-        .star-icon { transition: transform 0.2s ease; }
-        .star-icon:hover { transform: scale(1.2); }
     </style>
 </head>
 <body class="preload bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen font-sans">
 
-    <nav class="sticky top-0 z-40 w-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-700 px-4 py-3 flex flex-wrap gap-4 justify-between items-center">
+    <nav class="sticky top-0 z-40 w-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-700 px-4 py-3 flex gap-4 justify-between items-center">
         <div class="flex items-center gap-2">
             <img src="droplet.png" class="w-8 h-8 object-contain" alt="Logo">
-            <div class="flex items-baseline gap-1">
-                <h1 class="text-xl font-black tracking-tighter uppercase">GOONGAMES</h1>
-                <span class="text-[10px] font-bold text-blue-500 uppercase">Remake</span>
-            </div>
+            <h1 class="text-xl font-black tracking-tighter uppercase">GOONGAMES</h1>
         </div>
 
-        <div class="flex-grow max-w-md relative order-3 sm:order-none">
+        <div class="flex-grow max-w-md relative">
             <input type="text" id="searchInput" placeholder="Search games..." 
                 class="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full py-2 px-10 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-            <svg class="absolute left-3 top-2.5 text-zinc-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <svg class="absolute left-3 top-2.5 text-zinc-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </div>
 
         <button id="settingsBtn" class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full transition-all active:scale-95">
@@ -88,10 +76,7 @@
 
     <main id="homeView" class="max-w-7xl mx-auto p-6 space-y-12">
         <section id="favoritesSection" class="hidden">
-            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-yellow-500 mb-6 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                Favourited
-            </h2>
+            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-yellow-500 mb-6 flex items-center gap-2">FAVOURITES</h2>
             <div id="favGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 border-b border-zinc-200 dark:border-zinc-800 pb-12"></div>
         </section>
 
@@ -101,43 +86,56 @@
         </section>
     </main>
 
-    <section id="playerView" class="hidden fixed inset-0 z-50 bg-zinc-100 dark:bg-black flex flex-col">
+    <section id="playerView" class="fixed inset-0 z-50 bg-black">
         <div class="p-4 bg-white dark:bg-zinc-900 flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800">
-            <h2 id="activeGameTitle" class="font-bold text-zinc-900 dark:text-white uppercase tracking-widest text-sm">Game Title</h2>
-            <button id="closePlayer" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold transition-all active:scale-95 text-xs uppercase">Close</button>
+            <h2 id="activeGameTitle" class="font-bold uppercase tracking-widest text-sm">Game</h2>
+            <button id="closePlayer" class="px-6 py-2 bg-red-600 text-white rounded-full font-bold text-xs uppercase">Close</button>
         </div>
-        <div class="flex-grow relative bg-zinc-200 dark:bg-zinc-950">
-            <iframe id="gameIframe" src="" style="width:100%; height:100%;" class="border-0 absolute inset-0" allowfullscreen></iframe>
+        <div class="flex-grow w-full h-full relative overflow-hidden bg-black">
+            <iframe id="gameIframe" src="" class="absolute inset-0 w-full h-full border-0" allowfullscreen></iframe>
         </div>
-        <div class="p-3 bg-white dark:bg-zinc-900 flex gap-6 justify-center border-t border-zinc-200 dark:border-zinc-800">
-            <button onclick="document.getElementById('gameIframe').requestFullscreen()" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-white text-[10px] font-bold uppercase tracking-widest">Fullscreen</button>
-            <button id="tabBtn" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-white text-[10px] font-bold uppercase tracking-widest">New Tab</button>
+        <div class="p-3 bg-white dark:bg-zinc-900 flex gap-6 justify-center">
+            <button onclick="document.getElementById('gameIframe').requestFullscreen()" class="text-[10px] font-bold uppercase tracking-widest opacity-60 hover:opacity-100">Fullscreen</button>
+            <button id="tabBtn" class="text-[10px] font-bold uppercase tracking-widest opacity-60 hover:opacity-100">New Tab</button>
         </div>
     </section>
 
     <div id="settingsModal" class="hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-zinc-800 p-8 rounded-3xl w-full max-w-sm border border-zinc-200 dark:border-zinc-700 shadow-2xl overflow-y-auto max-h-[90vh]">
-            <h2 class="text-xl font-black mb-6 text-center uppercase tracking-tighter">Settings</h2>
+        <div class="bg-white dark:bg-zinc-800 p-8 rounded-3xl w-full max-w-sm shadow-2xl">
+            <h2 class="text-xl font-black mb-6 text-center uppercase">Settings</h2>
             
-            <div class="flex justify-between items-center mb-8 bg-zinc-100 dark:bg-zinc-700/50 p-4 rounded-2xl">
-                <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Dark Mode</span>
-                <button id="themeToggle" class="relative w-14 h-8 bg-zinc-300 dark:bg-blue-600 rounded-full p-1 transition-colors duration-300">
-                    <div id="toggleCircle" class="w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center">
-                        <svg class="sun-visible w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0z"/></svg>
-                        <svg class="moon-visible w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+            <div class="flex justify-between items-center mb-6 bg-zinc-100 dark:bg-zinc-700/50 p-4 rounded-2xl">
+                <span class="text-xs font-bold opacity-50 uppercase">Dark Mode</span>
+                <button id="themeToggle" class="relative w-14 h-8 bg-zinc-300 dark:bg-blue-600 rounded-full p-1">
+                    <div id="toggleCircle" class="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                        <svg class="sun-visible w-3 h-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 110 2 1 1 0 010-2z"/></svg>
+                        <svg class="moon-visible w-3 h-3 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
                     </div>
                 </button>
             </div>
 
-            <div class="space-y-4 mb-8">
-                <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest block text-center">Tab Cloaker</span>
-                <input type="text" id="cloakTitleInput" placeholder="Tab Name (e.g. My Drive)" class="w-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                <input type="text" id="cloakIconInput" placeholder="Icon URL" class="w-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl py-3 px-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
-                <button onclick="saveCloak()" class="w-full py-2 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-blue-700">Apply Cloak</button>
-                <button onclick="resetCloak()" class="w-full py-2 bg-zinc-200 dark:bg-zinc-600 text-zinc-600 dark:text-zinc-300 rounded-xl text-[10px] font-bold uppercase tracking-widest">Reset to Default</button>
+            <button onclick="openCloakMenu()" class="w-full py-4 mb-6 bg-zinc-100 dark:bg-zinc-700/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-2xl flex justify-between items-center px-4 transition-all">
+                <span class="text-xs font-bold uppercase opacity-50">Tab Cloak</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+
+            <button id="closeSettings" class="w-full py-3 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl font-bold">DONE</button>
+        </div>
+    </div>
+
+    <div id="cloakModal" class="hidden fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-zinc-800 p-8 rounded-3xl w-full max-w-sm shadow-2xl">
+            <h2 class="text-xl font-black mb-6 text-center uppercase tracking-tighter">Tab Cloaker</h2>
+            
+            <div class="space-y-4 mb-6">
+                <input type="text" id="cloakTitleInput" placeholder="Tab Title (e.g. Google Drive)" class="w-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl py-3 px-4 text-sm outline-none">
+                <input type="text" id="cloakIconInput" placeholder="Icon URL (e.g. favicon.ico)" class="w-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-200 dark:border-zinc-600 rounded-xl py-3 px-4 text-sm outline-none">
+                
+                <button onclick="saveCloak()" class="w-full py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest">Apply Cloak</button>
+                <button onclick="resetCloak()" class="w-full py-3 bg-zinc-200 dark:bg-zinc-600 text-zinc-500 dark:text-zinc-400 rounded-xl text-xs font-bold uppercase">Reset Default</button>
             </div>
 
-            <button id="closeSettings" class="w-full py-3 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl font-bold transition hover:scale-95">DONE</button>
+            <button onclick="closeCloakMenu()" class="w-full text-xs font-bold uppercase opacity-40 hover:opacity-100">Back to Settings</button>
         </div>
     </div>
 
@@ -153,12 +151,16 @@
 
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-        // Cloak Logic
+        // --- CLOAK LOGIC ---
+        function openCloakMenu() { document.getElementById('cloakModal').classList.remove('hidden'); }
+        function closeCloakMenu() { document.getElementById('cloakModal').classList.add('hidden'); }
+
         function saveCloak() {
             const title = document.getElementById('cloakTitleInput').value;
             const iconUrl = document.getElementById('cloakIconInput').value;
-            // Using a simple proxy prefix for the icon to avoid CORS/Blocking issues
-            const proxiedIcon = iconUrl ? `https://worker-proud-pine-3467.cors-proxy.workers.dev/?url=${encodeURIComponent(iconUrl)}` : '';
+            
+            // Use weserv.nl proxy - more robust for favicons
+            const proxiedIcon = iconUrl ? `https://images.weserv.nl/?url=${encodeURIComponent(iconUrl)}&default=${encodeURIComponent(iconUrl)}` : '';
 
             if(title) {
                 document.title = title;
@@ -178,74 +180,75 @@
             location.reload();
         }
 
-        function renderCard(game) {
-            const isFav = favorites.includes(game.id);
-            return `
-                <div class="group relative">
-                    <button onclick="toggleFav('${game.id}', event)" class="absolute top-2 right-2 z-10 p-2 rounded-full bg-black/40 backdrop-blur-md transition-all active:scale-90 hover:bg-black/60">
-                        <svg class="star-icon" width="16" height="16" fill="${isFav ? '#facc15' : 'none'}" stroke="${isFav ? '#facc15' : 'white'}" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                        </svg>
-                    </button>
-                    <div class="cursor-pointer" onclick="playGame('${game.id}')">
-                        <div class="aspect-video bg-zinc-200 dark:bg-zinc-800 rounded-2xl overflow-hidden mb-3 border-2 border-transparent group-hover:border-blue-500 shadow-lg transition-all transform group-hover:-translate-y-1">
-                            <img src="${game.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
-                        </div>
-                        <h3 class="font-bold text-[10px] uppercase tracking-widest opacity-60 group-hover:opacity-100 group-hover:text-blue-500 transition-all">${game.title}</h3>
-                    </div>
-                </div>
-            `;
-        }
-
+        // --- GAME ENGINE ---
         function init(filter = "") {
             document.body.classList.remove('preload');
             if (typeof GAMES_DATA === 'undefined') return;
 
             const filteredGames = GAMES_DATA.filter(g => g.title.toLowerCase().includes(filter.toLowerCase()));
-            grid.innerHTML = filteredGames.map(game => renderCard(game)).join('');
+            grid.innerHTML = filteredGames.map(game => `
+                <div class="group relative">
+                    <button onclick="toggleFav('${game.id}', event)" class="absolute top-2 right-2 z-10 p-2 rounded-full bg-black/40">
+                        <svg width="16" height="16" fill="${favorites.includes(game.id) ? '#facc15' : 'none'}" stroke="${favorites.includes(game.id) ? '#facc15' : 'white'}" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </button>
+                    <div onclick="playGame('${game.id}')" class="cursor-pointer">
+                        <div class="aspect-video bg-zinc-200 dark:bg-zinc-800 rounded-2xl overflow-hidden mb-2 border-2 border-transparent group-hover:border-blue-500 transition-all">
+                            <img src="${game.image}" class="w-full h-full object-cover">
+                        </div>
+                        <h3 class="font-bold text-[10px] uppercase tracking-widest opacity-60">${game.title}</h3>
+                    </div>
+                </div>
+            `).join('');
 
             const favGames = GAMES_DATA.filter(g => favorites.includes(g.id));
-            if (favGames.length > 0 && filter === "") {
-                favSection.classList.remove('hidden');
-                favGrid.innerHTML = favGames.map(game => renderCard(game)).join('');
-            } else {
-                favSection.classList.add('hidden');
-            }
+            favSection.classList.toggle('hidden', favGames.length === 0 || filter !== "");
+            favGrid.innerHTML = favGames.map(game => `
+                 <div class="group relative" onclick="playGame('${game.id}')">
+                    <div class="aspect-video bg-zinc-200 dark:bg-zinc-800 rounded-2xl overflow-hidden mb-2 border-2 border-transparent group-hover:border-blue-500 transition-all">
+                        <img src="${game.image}" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-[10px] uppercase tracking-widest opacity-60">${game.title}</h3>
+                </div>
+            `).join('');
         }
+
+        window.toggleFav = (id, e) => {
+            e.stopPropagation();
+            favorites = favorites.includes(id) ? favorites.filter(i => i !== id) : [...favorites, id];
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            init(searchInput.value);
+        };
 
         window.playGame = function(id) {
             const game = GAMES_DATA.find(g => g.id === id);
             if (!game) return;
             activeTitle.innerText = game.title;
             
-            // Fix squashed iframe bug: Force re-draw by setting src after a tiny delay
             home.classList.add('hidden');
-            player.classList.remove('hidden');
+            player.classList.add('active'); // CSS uses .active to show the flex-column
             
+            // Force re-draw and full fit
+            iframe.src = "";
             setTimeout(() => {
                 iframe.src = game.url;
-            }, 50);
+            }, 10);
 
             document.getElementById('tabBtn').onclick = () => window.open(game.url, '_blank');
         };
 
         document.getElementById('closePlayer').onclick = () => {
             iframe.src = ""; 
-            player.classList.add('hidden');
+            player.classList.remove('active');
             home.classList.remove('hidden');
         };
 
-        // Theme & Modal Handlers
+        // UI Handlers
         document.getElementById('themeToggle').onclick = () => {
-            const html = document.documentElement;
-            html.classList.toggle('dark');
-            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
         };
 
-        document.getElementById('settingsBtn').onclick = () => {
-            document.getElementById('cloakTitleInput').value = localStorage.getItem('cloakTitle') || "";
-            document.getElementById('settingsModal').classList.remove('hidden');
-        };
+        document.getElementById('settingsBtn').onclick = () => document.getElementById('settingsModal').classList.remove('hidden');
         document.getElementById('closeSettings').onclick = () => document.getElementById('settingsModal').classList.add('hidden');
 
         searchInput.oninput = (e) => init(e.target.value);
