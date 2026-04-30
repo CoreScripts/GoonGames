@@ -50,7 +50,7 @@ const GAMES_DATA = [
         title: "Subway Surfers",
         image: proxy("https://freefungames.dumbosdiary.com/wp-content/uploads/2024/02/subway-surfers-sanfrancisco.jpg"),
         url: "games/loader.html?url=https://jasongamesdev.github.io/subway-surfers/"
-    }
+    },
     {
         id: "7",
         title: "Dino Run DX",
