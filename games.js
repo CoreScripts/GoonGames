@@ -38,5 +38,23 @@ const GAMES_DATA = [
         title: "Geometry Dash",
         image: proxy("https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/322170/capsule_616x353.jpg?t=1775300400"),
         url: "games/loader.html?url=https://gamingshitposting.github.io/ext-bin-1/geometrylite.io/game/geometry-dash-full-version/index.html"
+    },
+    {
+        id: "5",
+        title: "Minecraft Mobile",
+        image: proxy("https://static0.howtogeekimages.com/wordpress/wp-content/uploads/2023/05/minecraft-2.jpg?w=1600&h=900&fit=crop"),
+        url: "games/loader.html?url=https://irv77.github.io/EaglerPocketMobile/demo/"
+    },
+    {
+        id: "6",
+        title: "Subway Surfers",
+        image: proxy("https://freefungames.dumbosdiary.com/wp-content/uploads/2024/02/subway-surfers-sanfrancisco.jpg"),
+        url: "games/loader.html?url=https://jasongamesdev.github.io/subway-surfers/"
+    }
+    {
+        id: "7",
+        title: "Dino Run DX",
+        image: proxy("https://img.itch.zone/aW1hZ2UvMjIyMDk1LzEwNTA0NzQucG5n/original/leNXVj.png"),
+        url: "games/loader.html?url=games/assets/dino_run.swf"
     }
 ];
