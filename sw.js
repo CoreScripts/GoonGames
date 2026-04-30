@@ -1,14 +1,18 @@
 const CACHE_NAME = 'goongames-v1';
+const ASSETS = [
+  './',
+  './index.html',
+  './games.js',
+  './droplet.png'
+];
 
-// We don't need to cache much, just enough to satisfy the PWA requirements
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(['./', './index.html']))
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
 });
 
-// This "Fetch" handler is what makes the phone trust the app
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
     fetch(event.request).catch(() => caches.match(event.request))
   );
