@@ -6,7 +6,7 @@
   
 */
 
-const proxy = (url) => `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=300&h=300&fit=cover&output=webp`;
+const proxy = (url) => `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=300&h=300&fit=contain&background=black&output=webp`;
 
 const GAMES_DATA = [
     {
@@ -30,7 +30,7 @@ const GAMES_DATA = [
     {
         id: "3",
         title: "Poly Track",
-        image: proxy("https://uhighmidway.com/wp-content/uploads/2025/03/25-0331-PolyTrack.png"),
+        image: proxy("https://i.ytimg.com/vi/wXsG1d9TzdI/maxresdefault.jpg"),
         url: "games/loader.html?url=https://smapskajendfjshwbekf-prog.github.io/newcargame/"
     },
     {
