@@ -9,10 +9,9 @@
 const GAMES_DATA = [
     {
         id: "0",
-        title: "Ruffle Demo",
+        title: "Geometry Dash",
         image: "https://sc.filehippo.net/images/t_app-icon-l/p/74ac306e-214e-40ee-963e-f1b8ee379f27/1693778373/ruffle-logo",
-        url: "https://ruffle.rs/demo/",
-        source: "https://github.com/ruffle-rs/ruffle"
+        url: "games/loader.html?url=https://jasongamesdev.github.io/parking-fury/",
     },
     {
         id: "1",
