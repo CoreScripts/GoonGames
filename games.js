@@ -18,4 +18,10 @@ const GAMES_DATA = [
         image: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=314,height=314,fit=cover,f=auto/b87616bb88c0e3cb4c150c59fdc767fa/hill-climb-racing-lite.png",
         url: "games/hill-climb.html" 
     },
+    {
+        id: "3",
+        title: "Poly Track",
+        image: "https://uhighmidway.com/wp-content/uploads/2025/03/25-0331-PolyTrack.png",
+        url: "https://smapskajendfjshwbekf-prog.github.io/newcargame/" 
+    }
 ];
