@@ -6,7 +6,7 @@
   
 */
 
-const proxy = (url) => `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=300&h=300&fit=contain&background=black&output=webp`;
+const proxy = (url) => `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=400&fit=inside&output=webp`;
 
 const GAMES_DATA = [
     {
