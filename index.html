@@ -25,16 +25,10 @@
     <script src="games.js"></script>
 
     <style>
-        /* 2. DISABLE TRANSITIONS ON LOAD */
         .preload * {
-            -webkit-transition: none !important;
-            -moz-transition: none !important;
-            -ms-transition: none !important;
-            -o-transition: none !important;
             transition: none !important;
         }
 
-        /* Smooth Global Transitions (Active only after load) */
         html, body, nav, section, div, h1, h2, h3, span, button {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
@@ -54,7 +48,13 @@
         .sun-visible { display: block; }
         .moon-visible { display: none; }
         .dark .sun-visible { display: none; }
-        .dark .moon-visible { display: block; }
+        .dark .moon-visible { block; }
+
+        /* Smooth Star Animation */
+        .star-icon {
+            transition: transform 0.2s ease, fill 0.2s ease;
+        }
+        .star-icon:hover { transform: scale(1.2); }
     </style>
 </head>
 <body class="preload bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen font-sans">
@@ -69,8 +69,19 @@
         </button>
     </nav>
 
-    <main id="homeView" class="max-w-7xl mx-auto p-6">
-        <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+    <main id="homeView" class="max-w-7xl mx-auto p-6 space-y-12">
+        <section id="favoritesSection" class="hidden">
+            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-yellow-500 mb-6 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                Favourited
+            </h2>
+            <div id="favGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 border-b border-zinc-200 dark:border-zinc-800 pb-12"></div>
+        </section>
+
+        <section>
+            <h2 class="text-xs font-black uppercase tracking-[0.3em] opacity-40 mb-6">All Library</h2>
+            <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+        </section>
     </main>
 
     <section id="playerView" class="hidden fixed inset-0 z-50 bg-zinc-100 dark:bg-black flex flex-col">
@@ -105,31 +116,64 @@
 
     <script>
         const grid = document.getElementById('gameGrid');
+        const favGrid = document.getElementById('favGrid');
+        const favSection = document.getElementById('favoritesSection');
         const home = document.getElementById('homeView');
         const player = document.getElementById('playerView');
         const iframe = document.getElementById('gameIframe');
         const activeTitle = document.getElementById('activeGameTitle');
 
-        function init() {
-            // 4. REMOVE PRELOAD CLASS (Enables transitions only after page is ready)
-            document.body.classList.remove('preload');
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-            if (typeof GAMES_DATA !== 'undefined') {
-                grid.innerHTML = GAMES_DATA.map(game => `
-                    <div class="group cursor-pointer" onclick="playGame('${game.id}')">
+        function renderCard(game) {
+            const isFav = favorites.includes(game.id);
+            return `
+                <div class="group relative">
+                    <button onclick="toggleFav('${game.id}', event)" class="absolute top-2 right-2 z-10 p-2 rounded-full bg-black/40 backdrop-blur-md transition-all active:scale-90 hover:bg-black/60">
+                        <svg class="star-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" 
+                             fill="${isFav ? '#facc15' : 'none'}" 
+                             stroke="${isFav ? '#facc15' : 'white'}" 
+                             stroke-width="2">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                    </button>
+                    
+                    <div class="cursor-pointer" onclick="playGame('${game.id}')">
                         <div class="aspect-video bg-zinc-200 dark:bg-zinc-800 rounded-2xl overflow-hidden mb-3 border-2 border-transparent group-hover:border-blue-500 shadow-lg transition-all transform group-hover:-translate-y-1">
                             <img src="${game.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
                         </div>
                         <h3 class="font-bold text-[10px] uppercase tracking-widest opacity-60 group-hover:opacity-100 group-hover:text-blue-500 transition-all">${game.title}</h3>
                     </div>
-                `).join('');
+                </div>
+            `;
+        }
+
+        function init() {
+            document.body.classList.remove('preload');
+            if (typeof GAMES_DATA === 'undefined') return;
+
+            // Render Library
+            grid.innerHTML = GAMES_DATA.map(game => renderCard(game)).join('');
+
+            // Render Favorites Section
+            const favGames = GAMES_DATA.filter(g => favorites.includes(g.id));
+            if (favGames.length > 0) {
+                favSection.classList.remove('hidden');
+                favGrid.innerHTML = favGames.map(game => renderCard(game)).join('');
+            } else {
+                favSection.classList.add('hidden');
             }
         }
 
-        document.getElementById('themeToggle').onclick = function() {
-            const html = document.documentElement;
-            html.classList.toggle('dark');
-            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        window.toggleFav = function(id, event) {
+            event.stopPropagation();
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(favId => favId !== id);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            init();
         };
 
         window.playGame = function(id) {
@@ -146,6 +190,12 @@
             iframe.src = ""; 
             player.classList.add('hidden');
             home.classList.remove('hidden');
+        };
+
+        document.getElementById('themeToggle').onclick = function() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
         };
 
         document.getElementById('settingsBtn').onclick = () => document.getElementById('settingsModal').classList.remove('hidden');
