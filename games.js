@@ -2,7 +2,7 @@
     
   QUICK REFERENCE FOR URLS:
   Iframe: games/loader.html?url=[INSERT URL SITE]
-  SWF:    games/loader.html?url=games/assets/[INSERT FILE].swf
+  SWF:    games/loader.html?url=[INSERT FILE NAME].swf
   
 */
 
