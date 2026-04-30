@@ -3,21 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoonGames Loader</title>
+    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     <style>
         body, html { margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden; background: #000; }
-        iframe { width: 100%; height: 100%; border: none; }
+        iframe, #ruffle-container { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
-    <iframe id="game-frame" allow="autoplay; fullscreen; focus-without-user-activation" sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-scripts allow-same-origin" allowfullscreen></iframe>
+    <iframe id="game-frame" style="display:none;" allow="autoplay; fullscreen; focus-without-user-activation" sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-scripts allow-same-origin" allowfullscreen></iframe>
+
+    <div id="ruffle-container" style="display:none;"></div>
 
     <script>
-        // Get the game URL from the address bar (e.g., loader.html?url=https://...)
         const params = new URLSearchParams(window.location.search);
-        const gameUrl = params.get('url');
-        
+        const gameUrl = decodeURIComponent(params.get('url'));
+        const iframe = document.getElementById('game-frame');
+        const container = document.getElementById('ruffle-container');
+
         if (gameUrl) {
-            document.getElementById('game-frame').src = decodeURIComponent(gameUrl);
+            // Check if the URL ends in .swf
+            if (gameUrl.toLowerCase().endsWith('.swf')) {
+                // FLASH MODE
+                container.style.display = "block";
+                const ruffle = window.RufflePlayer.newest();
+                const player = ruffle.createPlayer();
+                container.appendChild(player);
+                player.load(gameUrl);
+            } else {
+                // REGULAR IFRAME MODE
+                iframe.style.display = "block";
+                iframe.src = gameUrl;
+            }
         }
     </script>
 </body>
