@@ -9,8 +9,8 @@
 const GAMES_DATA = [
     {
         id: "0",
-        title: "Geometry Dash",
-        image: "https://sc.filehippo.net/images/t_app-icon-l/p/74ac306e-214e-40ee-963e-f1b8ee379f27/1693778373/ruffle-logo",
+        title: "Parking Fury",
+        image: "https://www.coolmathgames.com/sites/default/files/ParkingFury_OG-logo.jpg",
         url: "games/loader.html?url=https://jasongamesdev.github.io/parking-fury/",
     },
     {
@@ -29,6 +29,13 @@ const GAMES_DATA = [
         id: "3",
         title: "Poly Track",
         image: "https://uhighmidway.com/wp-content/uploads/2025/03/25-0331-PolyTrack.png",
-        url: "games/loader.html?url=https://smapskajendfjshwbekf-prog.github.io/newcargame/" 
+        url: "games/loader.html?url=https://smapskajendfjshwbekf-prog.github.io/newcargame/"
+    },
+    {
+        id: "4",
+        title: "Geometry Dash",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/322170/capsule_616x353.jpg?t=1775300400",
+        url: "games/loader.html?url=https://gamingshitposting.github.io/ext-bin-1/geometrylite.io/game/geometry-dash-full-version/index.html"
     }
+
 ];
