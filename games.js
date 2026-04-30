@@ -16,9 +16,9 @@ const GAMES_DATA = [
     },
     {
         id: "1",
-        title: "2048",
-        image: "https://play2048.co/meta/apple-touch-icon.png",
-        url: "games/loader.html?url=https://play2048.co/"
+        title: "Level Devil",
+        image: "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3242750/a78a03f1047a590e6b9b0360ec361924d7f98959/capsule_616x353.jpg?t=1774446792",
+        url: "games/loader.html?url=https://jasongamesdev.github.io/level-devil/"
     },
     {
         id: "2",
