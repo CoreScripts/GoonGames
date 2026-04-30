@@ -56,5 +56,17 @@ const GAMES_DATA = [
         title: "Dino Run DX",
         image: proxy("https://cdn15.idcgames.com/storage/image/1243/thumb_slider/default.jpg"),
         url: "games/loader.html?url=dino-run.swf"
+    },
+    {
+        id: "8",
+        title: "Bloons TD 5 (BTD 5)",
+        image: proxy("https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/306020/header.jpg?t=1770223235"),
+        url: "games/loader.html?url=btd5.swf"
+    },
+    {
+        id: "9",
+        title: "Cuphead Mobile",
+        image: proxy("https://miro.medium.com/1*2-5CpKRHjQUx6AF-LYKY1A.jpeg"),
+        url: "games/loader.html?url=https://dwdvil.github.io/cuphead-cdv-web/"
     }
 ];
