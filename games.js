@@ -120,7 +120,7 @@ const GAMES_DATA = [
     {
         id: "16",
         title: "Multi Stunt Car",
-        image: proxy("https://www.topgear.com/sites/default/files/images/news-article/2021/01/bc835f1e38475791220e9ab37964baa9/scr.jpg"),
+        image: proxy("https://sites.create-cdn.net/siteimages/19/3/4/193478/21/5/6/21561060/640x480.png?1753725291"),
         url: "games/loader.html?url=https://retro-foundry.github.io/multistuntcar/"
     }
 ];
