@@ -66,14 +66,12 @@
         .star-icon { transition: transform 0.2s ease; }
         .star-icon:hover { transform: scale(1.2); }
 
-        /* 1. LOGO ADAPTATION: Turns black in light mode */
         .logo-img { filter: invert(1); transition: filter 0.3s ease; }
         .dark .logo-img { filter: invert(0); }
 
-        /* 2. MUTE ICON: Subtle opacity change when muted instead of a red line */
         .mute-off { display: none; }
         .is-muted .mute-on { display: none; }
-        .is-muted .mute-off { display: block; opacity: 0.4; }
+        .is-muted .mute-off { display: block; opacity: 0.4; color: #ef4444; }
     </style>
 </head>
 <body class="preload bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen font-sans">
@@ -122,13 +120,17 @@
                         <path class="mute-on" d="M11 5L6 9H2v6h4l5 4V5z"></path>
                         <path class="mute-on" d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
                         <path class="mute-off" d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                        <line class="mute-off" x1="1" y1="1" x2="23" y2="23" stroke="#ef4444"></line>
                     </svg>
                 </button>
                 <button id="closePlayer" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold transition-all active:scale-95 text-xs uppercase">Close</button>
             </div>
         </div>
         <div class="flex-grow relative bg-zinc-200 dark:bg-zinc-950 overflow-hidden">
-            <iframe id="gameIframe" src="" class="w-full h-full border-0 absolute inset-0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            <iframe id="gameIframe" src="" class="w-full h-full border-0 absolute inset-0" 
+                allow="autoplay; fullscreen" 
+                sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-scripts allow-same-origin"
+                allowfullscreen></iframe>
         </div>
         <div class="p-3 bg-white dark:bg-zinc-900 flex gap-6 justify-center border-t border-zinc-200 dark:border-zinc-800">
             <button onclick="document.getElementById('gameIframe').requestFullscreen()" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-white text-[10px] font-bold uppercase tracking-widest">Fullscreen</button>
@@ -200,20 +202,28 @@
             location.reload();
         }
 
-        // IMPROVED MUTE: Disables the 'autoplay' permission completely to stop sound
+        // MUTE LOGIC
         muteBtn.onclick = () => {
             isMuted = !isMuted;
             muteBtn.classList.toggle('is-muted', isMuted);
             
-            const currentSrc = iframe.src;
-            if (isMuted) {
-                iframe.setAttribute('allow', 'fullscreen'); // Remove autoplay
-            } else {
-                iframe.setAttribute('allow', 'autoplay; fullscreen');
+            // 1. Same-Origin Mute (GitHub Hosted Games)
+            try {
+                const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const media = innerDoc.querySelectorAll('audio, video');
+                media.forEach(m => { 
+                    m.muted = isMuted; 
+                    m.volume = isMuted ? 0 : 1;
+                });
+            } catch (e) {
+                // 2. Cross-Origin Mute (External Websites)
+                // We refresh the iframe with/without autoplay permission
+                const currentSrc = iframe.src;
+                iframe.setAttribute('allow', isMuted ? 'fullscreen' : 'autoplay; fullscreen');
+                iframe.src = ""; // Clear
+                iframe.src = currentSrc; // Reload
+                console.log("External game: Resetting permissions to mute.");
             }
-            // We must reset the src to force the browser to respect the new 'allow' rules
-            iframe.src = "";
-            iframe.src = currentSrc;
         };
 
         function renderCard(game) {
@@ -259,7 +269,7 @@
             if (!game) return;
             activeTitle.innerText = game.title;
             
-            // Apply current mute state to the launch
+            // Respect the global mute state when loading a new game
             iframe.setAttribute('allow', isMuted ? 'fullscreen' : 'autoplay; fullscreen');
             iframe.src = game.url;
             
