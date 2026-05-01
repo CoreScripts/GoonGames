@@ -140,5 +140,11 @@ const GAMES_DATA = [
         title: "They are coming",
         image: proxy("https://img.itch.zone/aW1nLzExMjkzMjQxLnBuZw==/original/YWsiKf.png"),
         url: "games/loader.html?url=https://jasongamesdev.github.io/they-are-coming/"
+    },
+    {
+        id: "20",
+        title: "Combat Reloaded 2",
+        image: proxy("https://www.gamekarma.com/images/games/193.png"),
+        url: "games/loader.html?url=https://mc0825.github.io/g66/class-978/"
     }
 ];
