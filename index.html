@@ -49,16 +49,14 @@
     <script src="games.js"></script>
 
     <style>
-        /* Mobile Smoothness & Feedback */
-        * { -webkit-tap-highlight-color: transparent; }
+        /* Mobile Touch Support */
+        * { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
         
         .preload * { transition: none !important; }
         html, body, nav, section, div, h1, h2, h3, span, button, input {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
-        
-        /* Modern Scrollbars */
-        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
 
@@ -69,135 +67,94 @@
         .dark .sun-visible { display: none; } .dark .moon-visible { display: block; }
 
         .star-icon { transition: transform 0.2s ease; }
-        
+        .star-icon:active { transform: scale(1.3); }
+
         .logo-img { filter: invert(1); transition: filter 0.3s ease; }
         .dark .logo-img { filter: invert(0); }
-
-        .mute-off { display: none; }
-        .is-muted .mute-on { display: none; }
-        .is-muted .mute-off { display: block; opacity: 0.4; color: #ef4444; }
-
-        /* Animation for Mobile Settings */
-        @media (max-width: 640px) {
-            #settingsModal > div, #cloakModal > div {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                max-width: 100%;
-                border-radius: 2rem 2rem 0 0;
-                padding-bottom: env(safe-area-inset-bottom);
-                animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            }
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
     </style>
 </head>
 <body class="preload bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen font-sans overflow-x-hidden">
 
-    <nav class="sticky top-0 z-40 w-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-700 px-4 py-3 flex flex-wrap gap-3 justify-between items-center pt-[env(safe-area-inset-top)]">
+    <nav class="sticky top-0 z-40 w-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-700 px-4 py-3 flex flex-wrap gap-4 justify-between items-center">
         <div class="flex items-center gap-2">
-            <img src="droplet.png" class="w-7 h-7 object-contain logo-img" alt="Logo">
+            <img src="droplet.png" class="w-8 h-8 object-contain logo-img" alt="Logo">
             <div class="flex items-baseline gap-1">
-                <h1 class="text-lg font-black tracking-tighter uppercase italic">GOONGAMES</h1>
+                <h1 class="text-xl font-black tracking-tighter uppercase">GOONGAMES</h1>
+                <span class="text-[10px] font-bold text-blue-500 uppercase">Remake</span>
             </div>
         </div>
 
-        <div class="flex items-center gap-3">
-            <button id="settingsBtn" class="p-2.5 bg-zinc-100 dark:bg-zinc-700/50 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full transition-all active:scale-90">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
+        <div class="flex-grow max-w-md relative order-3 sm:order-none">
+            <input type="text" id="searchInput" placeholder="Search games..." 
+                class="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full py-2 px-10 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+            <svg class="absolute left-3 top-2.5 text-zinc-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </div>
 
-        <div class="w-full sm:flex-grow sm:max-w-md relative mt-1 sm:mt-0">
-            <input type="text" id="searchInput" placeholder="Search games..." 
-                class="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl py-3 px-10 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm appearance-none">
-            <svg class="absolute left-3 top-3.5 text-zinc-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        </div>
+        <button id="settingsBtn" class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full transition-all active:scale-90">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
     </nav>
 
-    <main id="homeView" class="max-w-7xl mx-auto p-4 sm:p-6 space-y-10 pb-20">
+    <main id="homeView" class="max-w-7xl mx-auto p-6 space-y-12">
         <section id="favoritesSection" class="hidden">
-            <h2 class="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500 mb-5 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-blue-500"></span> Favourited
+            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-yellow-500 mb-6 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                Favourited
             </h2>
-            <div id="favGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 border-b border-zinc-200 dark:border-zinc-800 pb-10"></div>
+            <div id="favGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 border-b border-zinc-200 dark:border-zinc-800 pb-12"></div>
         </section>
 
         <section id="librarySection">
-            <h2 class="text-[10px] font-black uppercase tracking-[0.3em] opacity-40 mb-5 flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-zinc-400"></span> Library
-            </h2>
-            <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"></div>
+            <h2 class="text-xs font-black uppercase tracking-[0.3em] opacity-40 mb-6">Library</h2>
+            <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
         </section>
     </main>
 
-    <section id="playerView" class="hidden fixed inset-0 z-50 bg-black flex flex-col">
-        <div class="p-3 bg-zinc-900 flex justify-between items-center border-b border-white/10">
+    <section id="playerView" class="hidden fixed inset-0 z-50 bg-zinc-100 dark:bg-black flex flex-col">
+        <div class="p-4 bg-white dark:bg-zinc-900 flex justify-between items-center border-b border-zinc-200 dark:border-zinc-800">
+            <h2 id="activeGameTitle" class="font-bold text-zinc-900 dark:text-white uppercase tracking-widest text-sm">Game Title</h2>
             <div class="flex items-center gap-3">
-                <button id="closePlayer" class="p-2 hover:bg-white/10 rounded-full transition-all active:scale-90">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
-                </button>
-                <h2 id="activeGameTitle" class="font-black text-white uppercase tracking-tighter text-xs truncate max-w-[150px]">Game Title</h2>
-            </div>
-            <div class="flex items-center gap-2">
-                <button id="muteBtn" class="p-2.5 active:bg-white/10 rounded-full transition-all">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path class="mute-on" d="M11 5L6 9H2v6h4l5 4V5z"></path>
-                        <path class="mute-on" d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                        <path class="mute-off" d="M11 5L6 9H2v6h4l5 4V5z"></path>
-                        <line class="mute-off" x1="1" y1="1" x2="23" y2="23" stroke="#ef4444"></line>
-                    </svg>
-                </button>
-                <button id="tabBtn" class="p-2.5 active:bg-white/10 rounded-full">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
-                </button>
+                <button id="closePlayer" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold transition-all active:scale-95 text-xs uppercase">Close</button>
             </div>
         </div>
-        <div class="flex-grow relative bg-black overflow-hidden">
+        <div class="flex-grow relative bg-zinc-200 dark:bg-zinc-950 overflow-hidden">
             <iframe id="gameIframe" src="" class="w-full h-full border-0 absolute inset-0" 
                 allow="autoplay; fullscreen" 
                 sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-scripts allow-same-origin"
                 allowfullscreen></iframe>
         </div>
+        <div class="p-3 bg-white dark:bg-zinc-900 flex gap-6 justify-center border-t border-zinc-200 dark:border-zinc-800">
+            <button onclick="document.getElementById('gameIframe').requestFullscreen()" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-white text-[10px] font-bold uppercase tracking-widest active:scale-95">Fullscreen</button>
+            <button id="tabBtn" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-white text-[10px] font-bold uppercase tracking-widest active:scale-95">New Tab</button>
+        </div>
     </section>
 
-    <div id="settingsModal" class="hidden fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-0 sm:p-4">
-        <div class="bg-white dark:bg-zinc-800 p-8 rounded-3xl w-full max-w-sm border border-zinc-200 dark:border-zinc-700 shadow-2xl relative">
-            <div class="w-12 h-1 bg-zinc-300 dark:bg-zinc-600 rounded-full mx-auto mb-6 sm:hidden"></div>
-            <h2 class="text-xl font-black mb-6 text-center uppercase italic tracking-tighter">Settings</h2>
-            
-            <div class="space-y-4">
-                <div class="flex justify-between items-center bg-zinc-50 dark:bg-zinc-900/50 p-4 rounded-2xl border border-zinc-100 dark:border-zinc-700">
-                    <span class="text-[10px] font-black opacity-50 uppercase tracking-widest">Display Theme</span>
-                    <button id="themeToggle" class="relative w-14 h-8 bg-zinc-300 dark:bg-blue-600 rounded-full p-1 transition-colors duration-300">
-                        <div id="toggleCircle" class="w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center">
-                            <svg class="sun-visible w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0z"/></svg>
-                            <svg class="moon-visible w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
-                        </div>
-                    </button>
-                </div>
-                
-                <button id="openCloakBtn" class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-blue-500/20">Tab Cloak Options</button>
-                <button id="closeSettings" class="w-full py-4 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-2xl font-black transition-all active:scale-95 uppercase text-xs">Close</button>
+    <div id="settingsModal" class="hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-zinc-800 p-8 rounded-3xl w-full max-w-sm border border-zinc-200 dark:border-zinc-700 shadow-2xl">
+            <h2 class="text-xl font-black mb-6 text-center uppercase tracking-tighter">Settings</h2>
+            <div class="flex justify-between items-center mb-6 bg-zinc-100 dark:bg-zinc-700/50 p-4 rounded-2xl">
+                <span class="text-[10px] font-bold opacity-50 uppercase tracking-widest">Theme</span>
+                <button id="themeToggle" class="relative w-14 h-8 bg-zinc-300 dark:bg-blue-600 rounded-full p-1 transition-colors duration-300 active:scale-95">
+                    <div id="toggleCircle" class="w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center">
+                        <svg class="sun-visible w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0z"/></svg>
+                        <svg class="moon-visible w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+                    </div>
+                </button>
             </div>
+            <button id="openCloakBtn" class="w-full py-4 mb-6 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest active:scale-95">Tab Cloak Settings</button>
+            <button id="closeSettings" class="w-full py-3 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl font-bold transition active:scale-95">DONE</button>
         </div>
     </div>
 
-    <div id="cloakModal" class="hidden fixed inset-0 z-[70] bg-black/80 backdrop-blur-md flex items-center justify-center p-0 sm:p-4">
+    <div id="cloakModal" class="hidden fixed inset-0 z-[70] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-white dark:bg-zinc-800 p-8 rounded-3xl w-full max-w-sm border border-zinc-200 dark:border-zinc-700">
             <h2 class="text-xl font-black mb-6 text-center uppercase tracking-tighter">Tab Cloak</h2>
             <div class="space-y-4">
-                <input type="text" id="cloakTitleInput" placeholder="New Page Title" class="w-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl py-4 px-4 text-sm outline-none focus:ring-2 focus:ring-blue-500">
-                <input type="text" id="cloakIconInput" placeholder="Icon URL (e.g. Google.ico)" class="w-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-xl py-4 px-4 text-sm outline-none focus:ring-2 focus:ring-blue-500">
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="saveCloak()" class="py-4 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase active:scale-95 transition-all">Apply</button>
-                    <button onclick="resetCloak()" class="py-4 bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-200 rounded-xl text-[10px] font-black uppercase active:scale-95 transition-all">Reset</button>
-                </div>
-                <button id="closeCloak" class="w-full mt-4 text-[10px] font-black opacity-30 uppercase tracking-widest">Back to settings</button>
+                <input type="text" id="cloakTitleInput" placeholder="New Title" class="w-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-600 rounded-xl py-3 px-4 text-sm outline-none">
+                <input type="text" id="cloakIconInput" placeholder="Icon URL" class="w-full bg-zinc-100 dark:bg-zinc-700 border border-zinc-600 rounded-xl py-3 px-4 text-sm outline-none">
+                <button onclick="saveCloak()" class="w-full py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase active:scale-95">Apply</button>
+                <button onclick="resetCloak()" class="w-full py-2 bg-zinc-600 text-zinc-300 rounded-xl text-[10px] font-bold uppercase active:scale-95">Reset</button>
+                <button id="closeCloak" class="w-full mt-4 text-xs font-bold opacity-50 active:scale-95">Back</button>
             </div>
         </div>
     </div>
@@ -211,10 +168,8 @@
         const player = document.getElementById('playerView');
         const iframe = document.getElementById('gameIframe');
         const activeTitle = document.getElementById('activeGameTitle');
-        const muteBtn = document.getElementById('muteBtn');
 
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        let isMuted = false;
 
         function saveCloak() {
             const title = document.getElementById('cloakTitleInput').value;
@@ -236,34 +191,20 @@
             location.reload();
         }
 
-        muteBtn.onclick = () => {
-            isMuted = !isMuted;
-            muteBtn.classList.toggle('is-muted', isMuted);
-            try {
-                const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-                const media = innerDoc.querySelectorAll('audio, video');
-                media.forEach(m => { m.muted = isMuted; m.volume = isMuted ? 0 : 1; });
-            } catch (e) {
-                const currentSrc = iframe.src;
-                iframe.setAttribute('allow', isMuted ? 'fullscreen' : 'autoplay; fullscreen');
-                iframe.src = ""; iframe.src = currentSrc;
-            }
-        };
-
         function renderCard(game) {
             const isFav = favorites.includes(game.id);
             return `
-                <div class="group relative bg-white dark:bg-zinc-800/40 p-2 sm:p-3 rounded-[24px] border border-zinc-200 dark:border-zinc-800 hover:border-blue-500 transition-all active:scale-95">
-                    <button onclick="toggleFav('${game.id}', event)" class="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/40 backdrop-blur-md active:scale-125 transition-all">
-                        <svg class="star-icon" width="14" height="14" fill="${isFav ? '#facc15' : 'none'}" stroke="${isFav ? '#facc15' : 'white'}" stroke-width="2.5" viewBox="0 0 24 24">
+                <div class="group relative active:scale-95 transition-transform">
+                    <button onclick="toggleFav('${game.id}', event)" class="absolute top-2 right-2 z-10 p-2 rounded-full bg-black/40 backdrop-blur-md active:scale-125 transition-transform">
+                        <svg class="star-icon" width="16" height="16" fill="${isFav ? '#facc15' : 'none'}" stroke="${isFav ? '#facc15' : 'white'}" stroke-width="2" viewBox="0 0 24 24">
                             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                         </svg>
                     </button>
                     <div class="cursor-pointer" onclick="playGame('${game.id}')">
-                        <div class="aspect-video bg-zinc-800 rounded-2xl overflow-hidden mb-3">
+                        <div class="aspect-video bg-zinc-800 rounded-2xl overflow-hidden mb-3 border-2 border-transparent group-hover:border-blue-500 transition-all">
                             <img src="${game.image}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy">
                         </div>
-                        <h3 class="font-black text-[9px] uppercase tracking-tighter opacity-60 group-hover:opacity-100 truncate">${game.title}</h3>
+                        <h3 class="font-bold text-[10px] uppercase tracking-widest opacity-60 group-hover:opacity-100">${game.title}</h3>
                     </div>
                 </div>
             `;
@@ -292,19 +233,32 @@
             const game = GAMES_DATA.find(g => g.id === id);
             if (!game) return;
             activeTitle.innerText = game.title;
-            iframe.setAttribute('allow', isMuted ? 'fullscreen' : 'autoplay; fullscreen');
+            
             iframe.src = game.url;
             
             document.getElementById('tabBtn').onclick = () => {
                 iframe.src = "";
                 player.classList.add('hidden');
                 home.classList.remove('hidden');
+
                 const win = window.open('about:blank', '_blank');
                 const cloakT = localStorage.getItem('cloakTitle') || "My Drive";
                 const cloakI = localStorage.getItem('cloakIcon') || "droplet.png";
+
                 win.document.write(`
-                    <html><head><title>${cloakT}</title><link rel="icon" href="${cloakI}"><style>body,html{margin:0;padding:0;height:100vh;overflow:hidden;background:#000;}iframe{border:none;width:100%;height:100%;}</style></head>
-                    <body><iframe src="${game.url}" allow="autoplay; fullscreen"></iframe></body></html>
+                    <html>
+                    <head>
+                        <title>\${cloakT}</title>
+                        <link rel="icon" href="\${cloakI}">
+                        <style>
+                            body, html { margin:0; padding:0; height:100vh; overflow:hidden; background:#000; }
+                            iframe { border:none; width:100%; height:100%; }
+                        </style>
+                    </head>
+                    <body>
+                        <iframe src="\${game.url}" allow="autoplay; fullscreen"></iframe>
+                    </body>
+                    </html>
                 `);
             };
 
@@ -313,7 +267,9 @@
         };
 
         document.getElementById('closePlayer').onclick = () => {
-            iframe.src = ""; player.classList.add('hidden'); home.classList.remove('hidden');
+            iframe.src = ""; 
+            player.classList.add('hidden');
+            home.classList.remove('hidden');
         };
 
         document.getElementById('themeToggle').onclick = () => {
