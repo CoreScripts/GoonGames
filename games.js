@@ -134,5 +134,11 @@ const GAMES_DATA = [
         title: "Crossy Road",
         image: proxy("https://crossy-road.io/data/image/how-to-play-crossy-road.jpg"),
         url: "games/loader.html?url=https://jasongamesdev.github.io/crossy-road/"
+    },
+    {
+        id: "19",
+        title: "They are coming",
+        image: proxy("https://img.itch.zone/aW1nLzExMjkzMjQxLnBuZw==/original/YWsiKf.png"),
+        url: "games/loader.html?url=https://jasongamesdev.github.io/they-are-coming/"
     }
 ];
