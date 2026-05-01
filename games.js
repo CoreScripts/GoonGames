@@ -79,7 +79,7 @@ const GAMES_DATA = [
         id: "11",
         title: "Apes VS Helium",
         image: proxy("https://i.ytimg.com/vi/tCEGJgH4Nhc/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLCyF9-K4-FBaWXDJ4zs12l1w_4CXA"),
-        url: "games/loader.html?url=Apes vs Helium.exe"
+        url: "games/loader.html?url=Apes vs Helium.html"
     },
     {
         id: "12",
@@ -92,5 +92,23 @@ const GAMES_DATA = [
         title: "Stick War",
         image: proxy("https://imgs.crazygames.com/games/stick-war/cover-1659084995039.jpg?metadata=none&quality=60&height=4895"),
         url: "games/loader.html?url=stick-war.swf"
+    },
+    {
+        id: "13",
+        title: "10 Minutes Till Dawn",
+        image: proxy("https://img.itch.zone/aW1nLzg3MTU5NzMucG5n/original/0LqGxb.png"),
+        url: "games/loader.html?url=https://10minutestilldawnonline.github.io/a7/10-minutes-till-dawn/"
+    },
+    {
+        id: "14",
+        title: "Stunt Simulator Multiplayer",
+        image: proxy("https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/979090/header.jpg?t=1685800193"),
+        url: "games/loader.html?url=https://dnrweqffuwjtx.cloudfront.net/games/2021/unity/stunt-simulator-multiplayer/index.html"
+    },
+    {
+        id: "14",
+        title: "Bandits Multiplayer PVP",
+        image: proxy("https://www.onlinegames.io/media/posts/487/Bandits-Multiplayer-PvP.jpg"),
+        url: "games/loader.html?url=https://d3tecwpbnz01jy.cloudfront.net/games/2021/unity2/bandits-multiplayer-pvp/index.html"
     }
 ];
