@@ -80,5 +80,17 @@ const GAMES_DATA = [
         title: "Apes VS Helium",
         image: proxy("https://i.ytimg.com/vi/tCEGJgH4Nhc/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLCyF9-K4-FBaWXDJ4zs12l1w_4CXA"),
         url: "games/loader.html?url=Apes vs Helium.html"
+    },
+    {
+        id: "12",
+        title: "Shift At Midnight",
+        image: proxy("https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/257204079/8c55402ce6c155cc8212644b158d3b4af95ab98a/movie_232x130.jpg?t=1758557357"),
+        url: "games/loader.html?url=https://corescripts.github.io/ShiftAtMidnightPort/"
+    },
+    {
+        id: "12",
+        title: "Stick War",
+        image: proxy("https://imgs.crazygames.com/games/stick-war/cover-1659084995039.jpg?metadata=none&quality=60&height=4895"),
+        url: "games/loader.html?url=stick-war.swf"
     }
 ];
