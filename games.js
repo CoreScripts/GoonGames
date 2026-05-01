@@ -79,7 +79,7 @@ const GAMES_DATA = [
         id: "11",
         title: "Apes VS Helium",
         image: proxy("https://i.ytimg.com/vi/tCEGJgH4Nhc/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLCyF9-K4-FBaWXDJ4zs12l1w_4CXA"),
-        url: "games/loader.html?url=Apes vs Helium.html"
+        url: "games/loader.html?url=Apes vs Helium.exe"
     },
     {
         id: "12",
