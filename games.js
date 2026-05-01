@@ -74,5 +74,11 @@ const GAMES_DATA = [
         title: "SAS: Zombie Assault 3",
         image: proxy("https://i.ibb.co/5hLrZ8Nt/sas3.png"),
         url: "games/loader.html?url=sas3.swf"
+    },
+    {
+        id: "11",
+        title: "Apes VS Helium",
+        image: proxy("https://i.ytimg.com/vi/tCEGJgH4Nhc/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLCyF9-K4-FBaWXDJ4zs12l1w_4CXA"),
+        url: "games/loader.html?url=Apes vs Helium.html"
     }
 ];
