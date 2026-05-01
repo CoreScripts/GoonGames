@@ -68,5 +68,11 @@ const GAMES_DATA = [
         title: "Cuphead Mobile",
         image: proxy("https://miro.medium.com/1*2-5CpKRHjQUx6AF-LYKY1A.jpeg"),
         url: "games/loader.html?url=https://dwdvil.github.io/cuphead-cdv-web/"
+    },
+    {
+        id: "10",
+        title: "SAS: Zombie Assault 3",
+        image: proxy("https://i.ibb.co/5hLrZ8Nt/sas3.png"),
+        url: "games/loader.html?url=sas3.swf"
     }
 ];
