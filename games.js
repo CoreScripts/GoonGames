@@ -107,8 +107,8 @@ const GAMES_DATA = [
     },
     {
         id: "14",
-        title: "Bandits Multiplayer PVP",
-        image: proxy("https://www.onlinegames.io/media/posts/487/Bandits-Multiplayer-PvP.jpg"),
-        url: "games/loader.html?url=https://d3tecwpbnz01jy.cloudfront.net/games/2021/unity2/bandits-multiplayer-pvp/index.html"
+        title: "Wordle Unlimited",
+        image: proxy("https://s.yimg.com/ny/api/res/1.2/QDn.EHsGxp31VlxIHVUO0w--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyNDI7aD02OTk-/https://media.zenfs.com/en/gamedaily_articles_552/d1c834aa2fc5d5ae0e71e1b3aeaa562d),
+        url: "games/loader.html?url=https://bosorioo.github.io/wordle-unlimited/"
     }
 ];
