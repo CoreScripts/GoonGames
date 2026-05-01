@@ -6,7 +6,6 @@
     <title>GoonGames Loader</title>
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     <style>
-        /* This ensures the entire page is used */
         body, html { 
             margin: 0; 
             padding: 0; 
@@ -19,7 +18,6 @@
             align-items: center;
         }
 
-        /* This forces the Ruffle Player element itself to fill the container */
         #ruffle-container, ruffle-player {
             width: 100%;
             height: 100%;
@@ -29,7 +27,12 @@
     </style>
 </head>
 <body>
-    <iframe id="game-frame" style="display:none;" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    <iframe id="game-frame" 
+        style="display:none;" 
+        allow="autoplay; fullscreen; storage-access" 
+        sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-scripts allow-same-origin"
+        allowfullscreen>
+    </iframe>
 
     <div id="ruffle-container" style="display:none;"></div>
 
@@ -49,7 +52,6 @@
                 
                 container.appendChild(player);
 
-                // This config forces the game to scale nicely to the screen
                 player.load({
                     url: decodedUrl,
                     allowScriptAccess: true,
@@ -58,6 +60,7 @@
                 });
             } else {
                 iframe.style.display = "block";
+                // We keep the URL exactly as is so the game can identify its own save data
                 iframe.src = decodedUrl;
             }
         }
