@@ -108,7 +108,7 @@ const GAMES_DATA = [
     {
         id: "14",
         title: "Wordle Unlimited",
-        image: proxy("https://s.yimg.com/ny/api/res/1.2/QDn.EHsGxp31VlxIHVUO0w--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyNDI7aD02OTk-/https://media.zenfs.com/en/gamedaily_articles_552/d1c834aa2fc5d5ae0e71e1b3aeaa562d),
+        image: proxy("https://www.dailyinfo.co.za/wp-content/uploads/2026/01/wordle-logo.webp"),
         url: "games/loader.html?url=https://bosorioo.github.io/wordle-unlimited/"
     }
 ];
