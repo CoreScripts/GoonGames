@@ -110,5 +110,17 @@ const GAMES_DATA = [
         title: "Wordle Unlimited",
         image: proxy("https://www.dailyinfo.co.za/wp-content/uploads/2026/01/wordle-logo.webp"),
         url: "games/loader.html?url=https://bosorioo.github.io/wordle-unlimited/"
+    },
+    {
+        id: "15",
+        title: "Flappy Bird",
+        image: proxy("https://techfrontier.com.au/nitropack_static/qoEzaUnVVMmdfnkgmWKdqPZHmHyfhDwG/assets/images/optimized/rev-7f03b38/techfrontier.com.au/wp-content/uploads/2025/07/Remembering-Flappy-Bird.jpg"),
+        url: "games/loader.html?url=https://ghgstore253.github.io/g26/class-434/"
+    },
+    {
+        id: "16",
+        title: "Multi Stunt Car",
+        image: proxy("https://www.topgear.com/sites/default/files/images/news-article/2021/01/bc835f1e38475791220e9ab37964baa9/scr.jpg"),
+        url: "games/loader.html?url=https://retro-foundry.github.io/multistuntcar/"
     }
 ];
