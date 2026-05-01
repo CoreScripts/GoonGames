@@ -16,7 +16,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script>
-        // 1. PERSISTENT CLOAK & THEME (RESTORED)
         (function() {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             if (savedTheme === 'dark') {
@@ -66,18 +65,22 @@
 
         .star-icon { transition: transform 0.2s ease; }
         .star-icon:hover { transform: scale(1.2); }
-        
-        /* Mute Slash Styling */
-        #muteSlash { display: none; stroke: #ef4444; }
-        .is-muted #muteSlash { display: block; }
-        .is-muted #volLines { display: none; }
+
+        /* 1. LOGO ADAPTATION: Turns black in light mode */
+        .logo-img { filter: invert(1); transition: filter 0.3s ease; }
+        .dark .logo-img { filter: invert(0); }
+
+        /* 2. MUTE ICON: Subtle opacity change when muted instead of a red line */
+        .mute-off { display: none; }
+        .is-muted .mute-on { display: none; }
+        .is-muted .mute-off { display: block; opacity: 0.4; }
     </style>
 </head>
 <body class="preload bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen font-sans">
 
     <nav class="sticky top-0 z-40 w-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-700 px-4 py-3 flex flex-wrap gap-4 justify-between items-center">
         <div class="flex items-center gap-2">
-            <img src="droplet.png" class="w-8 h-8 object-contain" alt="Logo">
+            <img src="droplet.png" class="w-8 h-8 object-contain logo-img" alt="Logo">
             <div class="flex items-baseline gap-1">
                 <h1 class="text-xl font-black tracking-tighter uppercase">GOONGAMES</h1>
                 <span class="text-[10px] font-bold text-blue-500 uppercase">Remake</span>
@@ -115,10 +118,10 @@
             <h2 id="activeGameTitle" class="font-bold text-zinc-900 dark:text-white uppercase tracking-widest text-sm">Game Title</h2>
             <div class="flex items-center gap-3">
                 <button id="muteBtn" class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-800 rounded-full transition-all">
-                    <svg id="muteIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
-                        <path id="volLines" d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                        <line id="muteSlash" x1="1" y1="1" x2="23" y2="23"></line>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path class="mute-on" d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                        <path class="mute-on" d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        <path class="mute-off" d="M11 5L6 9H2v6h4l5 4V5z"></path>
                     </svg>
                 </button>
                 <button id="closePlayer" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full font-bold transition-all active:scale-95 text-xs uppercase">Close</button>
@@ -197,18 +200,20 @@
             location.reload();
         }
 
-        // IMPROVED MUTE LOGIC (No refresh, Visual indicator)
+        // IMPROVED MUTE: Disables the 'autoplay' permission completely to stop sound
         muteBtn.onclick = () => {
             isMuted = !isMuted;
             muteBtn.classList.toggle('is-muted', isMuted);
             
-            // To "mute" without refreshing, we use the postMessage API if the game supports it, 
-            // but for generic iframes, we toggle the 'muted' attribute on all media elements inside 
-            // (Only works for same-origin or games with specific listeners). 
-            // The visual icon is updated immediately.
-            try {
-                iframe.contentWindow.postMessage(isMuted ? 'mute' : 'unmute', '*');
-            } catch(e) {}
+            const currentSrc = iframe.src;
+            if (isMuted) {
+                iframe.setAttribute('allow', 'fullscreen'); // Remove autoplay
+            } else {
+                iframe.setAttribute('allow', 'autoplay; fullscreen');
+            }
+            // We must reset the src to force the browser to respect the new 'allow' rules
+            iframe.src = "";
+            iframe.src = currentSrc;
         };
 
         function renderCard(game) {
@@ -253,6 +258,9 @@
             const game = GAMES_DATA.find(g => g.id === id);
             if (!game) return;
             activeTitle.innerText = game.title;
+            
+            // Apply current mute state to the launch
+            iframe.setAttribute('allow', isMuted ? 'fullscreen' : 'autoplay; fullscreen');
             iframe.src = game.url;
             
             document.getElementById('tabBtn').onclick = () => {
