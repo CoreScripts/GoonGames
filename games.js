@@ -122,5 +122,17 @@ const GAMES_DATA = [
         title: "Multi Stunt Car",
         image: proxy("https://sites.create-cdn.net/siteimages/19/3/4/193478/21/5/6/21561060/640x480.png?1753725291"),
         url: "games/loader.html?url=https://retro-foundry.github.io/multistuntcar/"
+    },
+    {
+        id: "17",
+        title: "Murder",
+        image: proxy("https://img.gamepix.com/games/murder-flash/cover/murder-flash.png?w=1200&ar=16:10"),
+        url: "games/loader.html?url=https://jasongamesdev.github.io/murder/"
+    },
+    {
+        id: "18",
+        title: "Crossy Road",
+        image: proxy("https://crossy-road.io/data/image/how-to-play-crossy-road.jpg"),
+        url: "games/loader.html?url=https://jasongamesdev.github.io/crossy-road/"
     }
 ];
