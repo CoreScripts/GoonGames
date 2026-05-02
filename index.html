@@ -34,14 +34,23 @@
         }
         input { user-select: text !important; }
         
-        /* Fixed interaction logic */
+        /* Grid and Card isolation */
+        .game-grid { display: grid; gap: 2rem; }
         .game-card { position: relative; isolation: isolate; }
-        .img-container { transition: border-color 0.2s ease, transform 0.2s ease; }
-        .game-img { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        /* Zoom on Hover & Mobile Tap */
+        .img-container { 
+            transition: border-color 0.2s ease; 
+            pointer-events: none; /* Prevents internal elements from messing with click detection */
+        }
+
+        .game-img { 
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            pointer-events: none;
+        }
+
+        /* Hover & Tap Effects */
         .game-card:hover .game-img, 
-        .game-card:active .game-img { transform: scale(1.1); }
+        .game-card:active .game-img { transform: scale(1.08); }
         
         .game-card:hover .img-container, 
         .game-card:active .img-container { border-color: #3b82f6; }
@@ -50,33 +59,31 @@
         .dark .logo-img { filter: invert(0); }
     </style>
 </head>
-<body class="bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen font-sans overflow-x-hidden">
+<body class="bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 min-h-screen font-sans">
 
     <nav class="sticky top-0 z-50 w-full bg-white/80 dark:bg-zinc-800/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-700 px-4 py-3 flex gap-4 justify-between items-center">
         <div class="flex items-center gap-2">
             <img src="droplet.png" class="w-8 h-8 object-contain logo-img" alt="Logo">
             <h1 class="text-xl font-black tracking-tighter uppercase">GOONGAMES</h1>
         </div>
-
         <div class="flex-grow max-w-md relative">
-            <input type="text" id="searchInput" placeholder="Search..." 
+            <input type="text" id="searchInput" placeholder="Search games..." 
                 class="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full py-2 px-10 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
         </div>
-
         <button id="settingsBtn" class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full active:scale-90 transition-transform">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
     </nav>
 
     <main id="homeView" class="max-w-7xl mx-auto p-6 space-y-12">
         <section id="favoritesSection" class="hidden">
-            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-yellow-500 mb-6 flex items-center gap-2">Favorites</h2>
-            <div id="favGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 border-b border-zinc-200 dark:border-zinc-800 pb-12"></div>
+            <h2 class="text-xs font-black uppercase tracking-[0.3em] text-yellow-500 mb-6">Favorites</h2>
+            <div id="favGrid" class="game-grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 border-b border-zinc-200 dark:border-zinc-800 pb-12"></div>
         </section>
 
         <section id="librarySection">
             <h2 class="text-xs font-black uppercase tracking-[0.3em] opacity-40 mb-6">Library</h2>
-            <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8"></div>
+            <div id="gameGrid" class="game-grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"></div>
         </section>
     </main>
 
@@ -109,9 +116,9 @@
         function renderCard(game) {
             const isFav = favorites.includes(game.id);
             return `
-                <div class="game-card group" onclick="playGame('${game.id}')">
-                    <button onclick="toggleFav('${game.id}', event)" class="absolute top-2 right-2 z-30 p-2 rounded-full bg-black/50 backdrop-blur-md active:scale-125 transition-transform">
-                        <svg width="14" height="14" fill="${isFav ? '#facc15' : 'none'}" stroke="${isFav ? '#facc15' : 'white'}" stroke-width="2" viewBox="0 0 24 24">
+                <div class="game-card group" data-id="${game.id}">
+                    <button class="fav-btn absolute top-2 right-2 z-30 p-2 rounded-full bg-black/50 backdrop-blur-md active:scale-125 transition-transform" data-id="${game.id}">
+                        <svg class="pointer-events-none" width="14" height="14" fill="${isFav ? '#facc15' : 'none'}" stroke="${isFav ? '#facc15' : 'white'}" stroke-width="2" viewBox="0 0 24 24">
                             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                         </svg>
                     </button>
@@ -123,13 +130,25 @@
             `;
         }
 
-        window.toggleFav = function(id, event) {
-            event.preventDefault();
-            event.stopPropagation();
-            favorites = favorites.includes(id) ? favorites.filter(f => f !== id) : [...favorites, id];
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            init(searchInput.value);
-        };
+        // Global Click Listener (Solves the "wrong game" glitch)
+        document.addEventListener('click', (e) => {
+            const favBtn = e.target.closest('.fav-btn');
+            const card = e.target.closest('.game-card');
+
+            if (favBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const id = favBtn.dataset.id;
+                favorites = favorites.includes(id) ? favorites.filter(f => f !== id) : [...favorites, id];
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                init(searchInput.value);
+                return;
+            }
+
+            if (card) {
+                playGame(card.dataset.id);
+            }
+        });
 
         window.playGame = function(id) {
             const game = GAMES_DATA.find(g => g.id === id);
