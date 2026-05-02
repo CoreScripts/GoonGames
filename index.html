@@ -49,9 +49,7 @@
     <script src="games.js"></script>
 
     <style>
-        /* Mobile Touch Support */
         * { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-        
         .preload * { transition: none !important; }
         html, body, nav, section, div, h1, h2, h3, span, button, input {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
@@ -59,23 +57,17 @@
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 10px; }
-
         #toggleCircle { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(0px); }
         .dark #toggleCircle { transform: translateX(24px); }
-
         .sun-visible { display: block; } .moon-visible { display: none; }
         .dark .sun-visible { display: none; } .dark .moon-visible { display: block; }
-
-        /* Animation Classes */
         .star-icon { transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .star-active { transform: scale(1.4) rotate(15deg); }
-        
         @keyframes toastIn {
             from { transform: translateY(100px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
         .toast-notify { animation: toastIn 0.3s ease forwards; }
-
         .logo-img { filter: invert(1); transition: filter 0.3s ease; }
         .dark .logo-img { filter: invert(0); }
     </style>
@@ -92,13 +84,10 @@
                 <span class="text-[10px] font-bold text-blue-500 uppercase">Remake</span>
             </div>
         </div>
-
         <div class="flex-grow max-w-md relative order-3 sm:order-none">
-            <input type="text" id="searchInput" placeholder="Search games..." 
-                class="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full py-2 px-10 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+            <input type="text" id="searchInput" placeholder="Search games..." class="w-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-full py-2 px-10 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
             <svg class="absolute left-3 top-2.5 text-zinc-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </div>
-
         <button id="settingsBtn" class="p-2 hover:bg-zinc-200 dark:hover:bg-zinc-700 rounded-full transition-all active:scale-90">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
@@ -112,7 +101,6 @@
             </h2>
             <div id="favGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 border-b border-zinc-200 dark:border-zinc-800 pb-12"></div>
         </section>
-
         <section id="librarySection">
             <h2 class="text-xs font-black uppercase tracking-[0.3em] opacity-40 mb-6">Library</h2>
             <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
@@ -127,10 +115,7 @@
             </div>
         </div>
         <div class="flex-grow relative bg-zinc-200 dark:bg-zinc-950 overflow-hidden">
-            <iframe id="gameIframe" src="" class="w-full h-full border-0 absolute inset-0" 
-                allow="autoplay; fullscreen" 
-                sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-scripts allow-same-origin"
-                allowfullscreen></iframe>
+            <iframe id="gameIframe" src="" class="w-full h-full border-0 absolute inset-0" allow="autoplay; fullscreen" sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-scripts allow-same-origin" allowfullscreen></iframe>
         </div>
         <div class="p-3 bg-white dark:bg-zinc-900 flex gap-6 justify-center border-t border-zinc-200 dark:border-zinc-800">
             <button onclick="document.getElementById('gameIframe').requestFullscreen()" class="text-zinc-500 dark:text-zinc-400 hover:text-blue-500 dark:hover:text-white text-[10px] font-bold uppercase tracking-widest active:scale-95">Fullscreen</button>
@@ -197,7 +182,7 @@
         function saveCloak() {
             const title = document.getElementById('cloakTitleInput').value;
             const iconUrl = document.getElementById('cloakIconInput').value;
-            const proxiedIcon = iconUrl ? `https://images.weserv.nl/?url=${encodeURIComponent(iconUrl)}&w=32&h=32` : '';
+            const proxiedIcon = iconUrl ? "https://images.weserv.nl/?url=" + encodeURIComponent(iconUrl) + "&w=32&h=32" : '';
             if(title) { document.title = title; localStorage.setItem('cloakTitle', title); }
             if(iconUrl) {
                 const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
@@ -216,21 +201,14 @@
 
         function renderCard(game) {
             const isFav = favorites.includes(game.id);
-            return `
-                <div class="group relative active:scale-105 transition-transform duration-300">
-                    <button onclick="toggleFav('${game.id}', event)" class="absolute top-2 right-2 z-10 p-2 rounded-full bg-black/40 backdrop-blur-md active:scale-125 transition-transform">
-                        <svg class="star-icon ${isFav ? 'text-yellow-500' : 'text-white'}" width="16" height="16" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                        </svg>
-                    </button>
-                    <div class="cursor-pointer" onclick="playGame('${game.id}')">
-                        <div class="aspect-video bg-zinc-800 rounded-2xl overflow-hidden mb-3 border-2 border-transparent group-hover:border-blue-500 group-hover:scale-105 transition-all duration-300">
-                            <img src="${game.image}" class="w-full h-full object-cover" loading="lazy">
-                        </div>
-                        <h3 class="font-bold text-[10px] uppercase tracking-widest opacity-60 group-hover:opacity-100">${game.title}</h3>
-                    </div>
-                </div>
-            `;
+            return '<div class="group relative active:scale-105 transition-transform duration-300">' +
+                   '<button onclick="toggleFav(\'' + game.id + '\', event)" class="absolute top-2 right-2 z-10 p-2 rounded-full bg-black/40 backdrop-blur-md active:scale-125 transition-transform">' +
+                   '<svg class="star-icon ' + (isFav ? 'text-yellow-500' : 'text-white') + '" width="16" height="16" fill="' + (isFav ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">' +
+                   '<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></button>' +
+                   '<div class="cursor-pointer" onclick="playGame(\'' + game.id + '\')">' +
+                   '<div class="aspect-video bg-zinc-800 rounded-2xl overflow-hidden mb-3 border-2 border-transparent group-hover:border-blue-500 group-hover:scale-105 transition-all duration-300">' +
+                   '<img src="' + game.image + '" class="w-full h-full object-cover" loading="lazy"></div>' +
+                   '<h3 class="font-bold text-[10px] uppercase tracking-widest opacity-60 group-hover:opacity-100">' + game.title + '</h3></div></div>';
         }
 
         function init(filter = "") {
@@ -249,17 +227,15 @@
             event.stopPropagation();
             const game = GAMES_DATA.find(g => g.id === id);
             const btn = event.currentTarget.querySelector('.star-icon');
-            
             if (favorites.includes(id)) {
                 favorites = favorites.filter(f => f !== id);
-                showNotification(`Removed ${game.title}`);
+                showNotification("Removed " + game.title);
             } else {
                 favorites.push(id);
                 btn.classList.add('star-active');
                 setTimeout(() => btn.classList.remove('star-active'), 400);
-                showNotification(`Added ${game.title} to Favourites`);
+                showNotification("Added " + game.title + " to Favourites");
             }
-            
             localStorage.setItem('favorites', JSON.stringify(favorites));
             init(searchInput.value);
         };
@@ -270,36 +246,19 @@
             activeTitle.innerText = game.title;
             iframe.src = game.url;
             
-            document.getElementById('tabBtn').onclick = () => {
+            document.getElementById('tabBtn').onclick = function() {
                 const cloakT = localStorage.getItem('cloakTitle') || "My Drive";
                 const cloakI = localStorage.getItem('cloakIcon') || "droplet.png";
-                
                 const win = window.open('about:blank', '_blank');
                 if (win) {
-                    win.document.write(\`
-                        <html>
-                        <head>
-                            <title>\${cloakT}</title>
-                            <link rel="icon" href="\${cloakI}">
-                            <style>
-                                body, html { margin:0; padding:0; height:100vh; overflow:hidden; background:#000; }
-                                iframe { border:none; width:100%; height:100%; }
-                            </style>
-                        </head>
-                        <body>
-                            <iframe src="\${game.url}" allow="autoplay; fullscreen"></iframe>
-                        </body>
-                        </html>
-                    \`);
-                    win.document.close();
-                    
-                    // Cleanup current view after opening
+                    const doc = win.document;
+                    doc.write('<html><head><title>' + cloakT + '</title><link rel="icon" href="' + cloakI + '"><style>body,html{margin:0;padding:0;height:100vh;overflow:hidden;background:#000;}iframe{border:none;width:100%;height:100%;}</style></head><body><iframe src="' + game.url + '" allow="autoplay; fullscreen"></iframe></body></html>');
+                    doc.close();
                     iframe.src = "";
                     player.classList.add('hidden');
                     home.classList.remove('hidden');
-                    showNotification("Opened in New Tab");
                 } else {
-                    alert("Pop-up blocked! Please allow pop-ups for this site.");
+                    alert("Please allow pop-ups!");
                 }
             };
 
