@@ -101,9 +101,9 @@ const GAMES_DATA = [
     },
     {
         id: "14",
-        title: "Stunt Simulator Multiplayer",
-        image: proxy("https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/979090/header.jpg?t=1685800193"),
-        url: "games/loader.html?url=https://dnrweqffuwjtx.cloudfront.net/games/2021/unity/stunt-simulator-multiplayer/index.html"
+        title: "Short Life",
+        image: proxy("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX00XIbqzgWApHxtw8oqm4E--TDsQpVFyuXg&s"),
+        url: "games/loader.html?url=https://jasongamesdev.github.io/short-life/"
     },
     {
         id: "14",
