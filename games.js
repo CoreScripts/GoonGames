@@ -143,8 +143,26 @@ const GAMES_DATA = [
     },
     {
         id: "22",
-        title: "Combat Reloaded 2",
+        title: "Plants Vs Zombies",
         image: proxy("https://www.gamekarma.com/images/games/193.png"),
-        url: "games/loader.html?url=https://mc0825.github.io/g66/class-978/"
+        url: "games/loader.html?url=pvz.swf"
+    },
+    {
+        id: "23",
+        title: "Rocket Soccer",
+        image: proxy("https://i.ytimg.com/vi/Qb6BQji66yc/maxresdefault.jpg"),
+        url: "games/loader.html?url=https://rocketsoccerderby.gitlab.io/file/"
+    },
+    {
+        id: "24",
+        title: "Scrap Metal 3",
+        image: proxy("https://www.drifted.com/wp-content/uploads/2018/10/scrap-metal-3-full-size.jpg"),
+        url: "games/loader.html?url=https://scrapmetalgame.github.io/game/"
+    },
+    {
+        id: "25",
+        title: "Odd Bot Out",
+        image: proxy("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUXz1UjJHC2wqZAknLHITt4e94Bf0OQhsajg&s"),
+        url: "games/loader.html?url=https://trueedu20.github.io/g22/class-390/"
     }
 ];
