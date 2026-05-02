@@ -88,61 +88,61 @@ const GAMES_DATA = [
         url: "games/loader.html?url=https://corescripts.github.io/ShiftAtMidnightPort/"
     },
     {
-        id: "12",
+        id: "13",
         title: "Stick War",
         image: proxy("https://imgs.crazygames.com/games/stick-war/cover-1659084995039.jpg?metadata=none&quality=60&height=4895"),
         url: "games/loader.html?url=stick-war.swf"
     },
     {
-        id: "13",
+        id: "14",
         title: "10 Minutes Till Dawn",
         image: proxy("https://img.itch.zone/aW1nLzg3MTU5NzMucG5n/original/0LqGxb.png"),
         url: "games/loader.html?url=https://10minutestilldawnonline.github.io/a7/10-minutes-till-dawn/"
     },
     {
-        id: "14",
+        id: "15",
         title: "Short Life",
         image: proxy("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX00XIbqzgWApHxtw8oqm4E--TDsQpVFyuXg&s"),
         url: "games/loader.html?url=https://jasongamesdev.github.io/short-life/"
     },
     {
-        id: "14",
+        id: "16",
         title: "Wordle Unlimited",
         image: proxy("https://www.dailyinfo.co.za/wp-content/uploads/2026/01/wordle-logo.webp"),
         url: "games/loader.html?url=https://bosorioo.github.io/wordle-unlimited/"
     },
     {
-        id: "15",
+        id: "17",
         title: "Flappy Bird",
         image: proxy("https://techfrontier.com.au/nitropack_static/qoEzaUnVVMmdfnkgmWKdqPZHmHyfhDwG/assets/images/optimized/rev-7f03b38/techfrontier.com.au/wp-content/uploads/2025/07/Remembering-Flappy-Bird.jpg"),
         url: "games/loader.html?url=https://ghgstore253.github.io/g26/class-434/"
     },
     {
-        id: "16",
+        id: "18",
         title: "Multi Stunt Car",
         image: proxy("https://sites.create-cdn.net/siteimages/19/3/4/193478/21/5/6/21561060/640x480.png?1753725291"),
         url: "games/loader.html?url=https://retro-foundry.github.io/multistuntcar/"
     },
     {
-        id: "17",
+        id: "19",
         title: "Murder",
         image: proxy("https://img.gamepix.com/games/murder-flash/cover/murder-flash.png?w=1200&ar=16:10"),
         url: "games/loader.html?url=https://jasongamesdev.github.io/murder/"
     },
     {
-        id: "18",
+        id: "20",
         title: "Crossy Road",
         image: proxy("https://crossy-road.io/data/image/how-to-play-crossy-road.jpg"),
         url: "games/loader.html?url=https://jasongamesdev.github.io/crossy-road/"
     },
     {
-        id: "19",
+        id: "21",
         title: "They are coming",
         image: proxy("https://img.itch.zone/aW1nLzExMjkzMjQxLnBuZw==/original/YWsiKf.png"),
         url: "games/loader.html?url=https://jasongamesdev.github.io/they-are-coming/"
     },
     {
-        id: "20",
+        id: "22",
         title: "Combat Reloaded 2",
         image: proxy("https://www.gamekarma.com/images/games/193.png"),
         url: "games/loader.html?url=https://mc0825.github.io/g66/class-978/"
