@@ -144,7 +144,7 @@ const GAMES_DATA = [
     {
         id: "22",
         title: "Plants Vs Zombies",
-        image: proxy("https://www.gamekarma.com/images/games/193.png"),
+        image: proxy("https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/257227152/d9139c3f0ddd941e7f9d998801a57f4b56731041/movie_232x130.jpg?t=1762352699"),
         url: "games/loader.html?url=pvz.swf"
     },
     {
