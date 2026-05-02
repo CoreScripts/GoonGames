@@ -164,5 +164,11 @@ const GAMES_DATA = [
         title: "Odd Bot Out",
         image: proxy("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUXz1UjJHC2wqZAknLHITt4e94Bf0OQhsajg&s"),
         url: "games/loader.html?url=https://trueedu20.github.io/g22/class-390/"
+    },
+    {
+        id: "26",
+        title: "TikTok",
+        image: proxy("https://variety.com/wp-content/uploads/2021/06/TikTok-Jump.png"),
+        url: "games/loader.html?url=https://homo-unblocker.vercel.app/uv/service/hvtrs8%2F-wuw%2Ctkkvoi.aoo%2F"
     }
 ];
