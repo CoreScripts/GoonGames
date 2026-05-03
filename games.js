@@ -170,5 +170,11 @@ const GAMES_DATA = [
         title: "Parking Fury",
         image: proxy("https://www.coolmathgames.com/sites/default/files/ParkingFury_OG-logo.jpg"),
         url: "games/loader.html?url=https://jasongamesdev.github.io/parking-fury/"
+    },
+    {
+        id: "27",
+        title: "Hot Wheels: Race off",
+        image: proxy("https://www.coolmathgames.com/sites/default/files/ParkingFury_OG-logo.jpg"),
+        url: "games/loader.html?url=Hot Wheels_ Race Off.html"
     }
 ];
