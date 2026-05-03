@@ -173,8 +173,8 @@ const GAMES_DATA = [
     },
     {
         id: "27",
-        title: "Hot Wheels: Race off",
+        title: "flappy",
         image: proxy("https://www.coolmathgames.com/sites/default/files/ParkingFury_OG-logo.jpg"),
-        url: "games/loader.html?url=Hot Wheels_ Race Off.html"
+        url: "games/loader.html?url=play.unity.com game.html"
     }
 ];
