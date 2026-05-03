@@ -11,9 +11,9 @@ const proxy = (url) => `https://images.weserv.nl/?url=${encodeURIComponent(url)}
 const GAMES_DATA = [
     {
         id: "0",
-        title: "Parking Fury",
-        image: proxy("https://www.coolmathgames.com/sites/default/files/ParkingFury_OG-logo.jpg"),
-        url: "games/loader.html?url=https://jasongamesdev.github.io/parking-fury/",
+        title: "Roomer Web | Chatroom (BETA)",
+        image: proxy("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpxedpmd8OHf38ZO4A-8piXOUADQuQaVMJaw&s"),
+        url: "games/loader.html?url=https://corescripts.github.io/chatroom/",
     },
     {
         id: "1",
@@ -167,8 +167,8 @@ const GAMES_DATA = [
     },
     {
         id: "26",
-        title: "TikTok",
-        image: proxy("https://variety.com/wp-content/uploads/2021/06/TikTok-Jump.png"),
-        url: "games/loader.html?url=https://homo-unblocker.vercel.app/uv/service/hvtrs8%2F-wuw%2Ctkkvoi.aoo%2F"
+        title: "Parking Fury",
+        image: proxy("https://www.coolmathgames.com/sites/default/files/ParkingFury_OG-logo.jpg"),
+        url: "games/loader.html?url=https://jasongamesdev.github.io/parking-fury/"
     }
 ];
