@@ -151,7 +151,7 @@ const GAMES_DATA = [
         id: "23",
         title: "Rocket Soccer",
         image: proxy("https://i.ytimg.com/vi/Qb6BQji66yc/maxresdefault.jpg"),
-        url: "games/loader.html?url=https://rocketsoccerderby.gitlab.io/file/"
+        url: "games/loader.html?url=https://rocketsoccerderby.bitbucket.io/file/"
     },
     {
         id: "24",
