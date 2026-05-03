@@ -1,319 +1,78 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)https://www.madkidgames.com/games/hot-wheels-race-off/ -->
-<html lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script>(function(w,i,g){w[g]=w[g]||[];if(typeof w[g].push=='function')w[g].push(i)})
-(window,'GT-5MCJDFHT','google_tags_first_party');</script><script async="" src="./saved_resource"></script>
-			<script>
-				window.dataLayer = window.dataLayer || [];
-				function gtag(){dataLayer.push(arguments);}
-				gtag('js', new Date());
-				gtag('set', 'developer_id.dY2E1Nz', true);
-				
-			</script>
-			
-  
-  
-  <title>Unity WebGL Player | Hot Wheels Race Off</title>
-  <link rel="shortcut icon" href="https://www.madkidgames.com/games/hot-wheels-race-off/TemplateData/favicon.ico">
-  <link rel="stylesheet" href="./style.css">
-  <link rel="manifest" href="https://www.madkidgames.com/games/hot-wheels-race-off/manifest.webmanifest">
-<!-- H5_MADKIDGAMES_UNITY_PATCH -->
-<script>
-window.unityInstance = null;
-</script>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Hot Wheels Race Off | Unity Player</title>
+    
+    <link rel="stylesheet" href="./style.css">
 
-<!-- H5_MADKIDGAMES_DOMAIN_GUARD -->
-<script>
-(function () {
-  const BRAND = 'MadKidGames';
-  const WHITELIST_URL = 'https://www.madkidgames.com/whitelisted.json';
-  const GAME_ENUM = 'HOT_WHEELS_RACE_OFF';
-  const OFFICIAL_SITE = 'https://www.madkidgames.com';
-  const REDIRECT_DELAY = 300000;
-
-  // --------------------------------------------------
-  // HELPERS
-  // --------------------------------------------------
-  function normalize(d) {
-    return (d || '')
-      .toLowerCase()
-      .replace(/^www\\./, '')
-      .replace(/:\\d+$/, '');
-  }
-
-  function safe(fn) {
-    try {
-      const v = fn();
-      return v ? normalize(v) : null;
-    } catch {
-      return null;
-    }
-  }
-
-  function getFlag(flags, key, def) {
-    return flags && flags[key] !== undefined ? flags[key] : def;
-  }
-
-  let DEBUG = false;
-  function dlog() { if (DEBUG) console.log.apply(console, arguments); }
-  function dwarn() { if (DEBUG) console.warn.apply(console, arguments); }
-
-  const selfHost = normalize(location.hostname);
-
-  // --------------------------------------------------
-  // JS DOMAIN DETECTION (UNCHANGED)
-  // --------------------------------------------------
-  const signals = [];
-
-  signals.push(safe(() =>
-    window.location.ancestorOrigins &&
-    window.location.ancestorOrigins.length > 0 &&
-    new URL(window.location.ancestorOrigins[0]).hostname
-  ));
-
-  signals.push(safe(() => window.top?.location?.hostname));
-  signals.push(safe(() => window.parent?.location?.hostname));
-  signals.push(safe(() => document.referrer && new URL(document.referrer).hostname));
-  signals.push(safe(() => window.opener?.location?.hostname));
-
-  try {
-    const nav = performance.getEntriesByType('navigation')[0];
-    if (nav?.name) {
-      signals.push(normalize(new URL(nav.name).hostname));
-    }
-  } catch {}
-
-  signals.push(selfHost);
-
-  const uniqueSignals = [...new Set(signals.filter(Boolean))];
-  const foreignSignals = uniqueSignals.filter(d => d !== selfHost);
-  const jsEmbeddingDomain = foreignSignals.length > 0 ? foreignSignals[0] : selfHost;
-
-  // --------------------------------------------------
-  // UNITY HANDSHAKE
-  // --------------------------------------------------
-  function waitForUnity(cb) {
-    const t = setInterval(() => {
-      if (window.unityInstance && window.unityInstance.SendMessage) {
-        clearInterval(t);
-        cb();
-      }
-    }, 100);
-  }
-
-  // --------------------------------------------------
-  // WHITELIST CHECK (CHECK ALWAYS, ENFORCE OPTIONALLY)
-  // --------------------------------------------------
-  fetch(WHITELIST_URL + '?v=' + Date.now(), { cache: 'no-store' })
-    .then(r => r.json())
-    .then(json => {
-      const flags = json.flags || {};
-
-      DEBUG = getFlag(flags, 'debug_logs', false);
-
-      const APPLY_ENFORCEMENT =
-        getFlag(flags, 'redirect_on_reject', false);
-
-      const CHECK_DOMAIN =
-        getFlag(flags, 'enforce_domain_check', true);
-
-      dlog('[H5] Domain guard initialized');
-      dlog('[H5] Game enum:', GAME_ENUM);
-      dlog('[H5] Self host:', selfHost);
-      dlog('[H5] Detected embedding domain:', jsEmbeddingDomain);
-      dlog('[H5] Flags:', flags);
-
-      const game = (json.whitelisted_games || []).find(
-        g => g.game_enum === GAME_ENUM
-      );
-
-      const allowedDomains =
-        (json.allowed_domains || []).map(normalize);
-
-      let allowed = true;
-
-      if (CHECK_DOMAIN) {
-        allowed =
-          !!game &&
-          allowedDomains.includes(jsEmbeddingDomain);
-
-        dlog('[H5] Allowed domains:', allowedDomains);
-        dlog('[H5] Domain allowed:', allowed);
-      }
-
-      // --------------------------------------------------
-      // FINAL DECISION (LOGIC PRESERVED, ENFORCEMENT GATED)
-      // --------------------------------------------------
-      waitForUnity(() => {
-        if (allowed || !APPLY_ENFORCEMENT) {
-          dlog('[H5][' + BRAND + '] DOMAIN APPROVED');
-          unityInstance.SendMessage('H5MadKidGames', 'H5_OnDomainApproved');
-        } else {
-          dwarn('[H5][' + BRAND + '] DOMAIN REJECTED');
-          unityInstance.SendMessage('H5MadKidGames', 'H5_OnDomainRejected');
-
-          setTimeout(() => {
-            try {
-              window.top.location.href =
-                game?.original_game_url || OFFICIAL_SITE;
-            } catch {
-              location.href = OFFICIAL_SITE;
-            }
-          }, REDIRECT_DELAY);
-        }
-      });
-    })
-    .catch(err => {
-      console.error('[H5] Whitelist fetch failed', err);
-
-      // Fail-open (never block by default)
-      waitForUnity(() => {
-        unityInstance.SendMessage('H5MadKidGames', 'H5_OnDomainApproved');
-      });
-    });
-})();
-</script>
-
-<!-- H5_MADKIDGAMES_ADS_INJECTED -->
-<script async="" data-ad-frequency-hint="30s" data-ad-channel="8806355381" src="./f.txt" crossorigin="anonymous">
-</script>
-<script>
-window.adsbygoogle = window.adsbygoogle || [];
-var adBreak = adConfig = function(o) { adsbygoogle.push(o); };
-</script>
-
+    <script>
+        window.unityInstance = null;
+    </script>
 </head>
 <body>
-  <div id="unity-container">
-    <canvas id="unity-canvas" width="2256" height="1269" tabindex="-1" style="background: url(&quot;Build/74ef17f51df309ca33050fe5cdcda334.jpg&quot;) center center / cover; width: 1504px; height: 846px; cursor: default;"></canvas>
+    <div id="unity-container">
+        <canvas id="unity-canvas" tabindex="-1" style="width: 100%; height: 100%; background: #000;"></canvas>
 
-    <div id="unity-loading-bar" style="display: none;">
-      <div id="unity-logo">
-        <img src="./thumb_2.jpg" alt="Game Logo" id="unity-logo-img">
-      </div>
-      <div id="unity-game-name">Hot Wheels Race Off</div>
-      <div id="unity-company-name">by madkidgames.com</div>
-
-      <div id="unity-progress-bar-empty">
-        <div id="unity-progress-bar-full" style="width: 100%;"></div>
-      </div>
-
-      <!-- ✅ Spinner placed inside loading bar -->
-      <div id="custom-loading-spinner" style="display: none;">
-        <div class="spinner"></div>
-        <div class="spinner-text">Loading...</div>
-      </div>
+        <div id="unity-loading-bar">
+            <div id="unity-logo"><img src="./thumb_2.jpg" style="width:150px;"></div>
+            <div id="unity-game-name" style="color:white; font-family:sans-serif;">Hot Wheels Race Off</div>
+            <div id="unity-progress-bar-empty">
+                <div id="unity-progress-bar-full" style="background:red; height:10px; width:0%;"></div>
+            </div>
+        </div>
     </div>
 
-    <div id="unity-warning"></div>
-  </div>
+    <script>
+        const container = document.querySelector("#unity-container");
+        const canvas = document.querySelector("#unity-canvas");
+        const loadingBar = document.querySelector("#unity-loading-bar");
+        const progressBarFull = document.querySelector("#unity-progress-bar-full");
 
-  <!-- Show spinner + loading bar immediately -->
-  <script>
-    const loadingBar = document.querySelector("#unity-loading-bar");
-    const spinner = document.getElementById("custom-loading-spinner");
-    if (loadingBar) loadingBar.style.display = "block";
-    if (spinner) spinner.style.display = "flex";
-  </script>
+        // IMPORTANT: Ensure these filenames match the files in your /Build/ folder exactly
+        const buildUrl = "Build";
+        const loaderUrl = buildUrl + "/7a2dbded24d57e056180125b1583e7c4.loader.js";
 
-  <script>
-    window.addEventListener("load", function () {
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("ServiceWorker.js");
-      }
-    });
+        const config = {
+            dataUrl: buildUrl + "/7aa58569a745d3a7067e52af05e7fb6f.data.br",
+            frameworkUrl: buildUrl + "/cb68df8b6138accfef441a97d929e28f.framework.js.br",
+            codeUrl: buildUrl + "/78a19b693935f3d4c4d402beb26482fe.wasm.br",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "madkidgames.com",
+            productName: "Hot Wheels Race Off",
+            productVersion: "1.1.11595",
+        };
 
-    const container = document.querySelector("#unity-container");
-    const canvas = document.querySelector("#unity-canvas");
-    const progressBarFull = document.querySelector("#unity-progress-bar-full");
-    const warningBanner = document.querySelector("#unity-warning");
+        const script = document.createElement("script");
+        script.src = loaderUrl;
+        script.onload = () => {
+            createUnityInstance(canvas, config, (progress) => {
+                progressBarFull.style.width = 100 * progress + "%";
+            }).then((instance) => {
+                window.unityInstance = instance;
+                loadingBar.style.display = "none";
+            }).catch((message) => {
+                console.error(message);
+            });
+        };
+        document.body.appendChild(script);
 
-    function unityShowBanner(msg, type) {
-      function updateBannerVisibility() {
-        warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-      }
-      const div = document.createElement('div');
-      div.innerHTML = msg;
-      warningBanner.appendChild(div);
-      if (type == 'error') div.style = 'background: red; padding: 10px;';
-      else {
-        if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-        setTimeout(function () {
-          warningBanner.removeChild(div);
-          updateBannerVisibility();
-        }, 5000);
-      }
-      updateBannerVisibility();
-    }
-
-    const buildUrl = "Build";
-    const loaderUrl = buildUrl + "/7a2dbded24d57e056180125b1583e7c4.loader.js";
-
-    const config = {
-      dataUrl: buildUrl + "/7aa58569a745d3a7067e52af05e7fb6f.data.br",
-      frameworkUrl: buildUrl + "/cb68df8b6138accfef441a97d929e28f.framework.js.br",
-      codeUrl: buildUrl + "/78a19b693935f3d4c4d402beb26482fe.wasm.br",
-      streamingAssetsUrl: "StreamingAssets",
-      companyName: "madkidgames.com",
-      productName: "Hot Wheels Race Off",
-      productVersion: "1.1.11595",
-      showBanner: unityShowBanner,
-    };
-
-    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-      const meta = document.createElement('meta');
-      meta.name = 'viewport';
-      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-      document.getElementsByTagName('head')[0].appendChild(meta);
-    }
-
-    canvas.style.background = "url('" + buildUrl + "/74ef17f51df309ca33050fe5cdcda334.jpg') center / cover";
-
-    const script = document.createElement("script");
-    script.src = loaderUrl;
-    script.onload = () => {
-      createUnityInstance(canvas, config, (progress) => {
-        progressBarFull.style.width = 100 * progress + "%";
-      }).then((instance) => {
-window.unityInstance = instance;
-        loadingBar.style.display = "none";
-        if (spinner) spinner.style.display = "none";
-      }).catch((message) => {
-        alert(message);
-      });
-    };
-    document.body.appendChild(script);
-  </script><script src="./7a2dbded24d57e056180125b1583e7c4.loader.js.download"></script>
-
-<!-- INJECTED_BY: WebGLCanvasResizeInjectorLandscape -->
-<script>
-(function () {
-  function resizeUnityCanvas() {
-    const canvas = document.getElementById('unity-canvas');
-    if (!canvas) return;
-
-    const targetAspect = 16 / 9;
-    const windowWidth = window.innerWidth;
-    const windowHeight = window.innerHeight;
-
-    let newWidth = windowWidth;
-    let newHeight = windowWidth / targetAspect;
-
-    if (newHeight > windowHeight) {
-      newHeight = windowHeight;
-      newWidth = newHeight * targetAspect;
-    }
-
-    canvas.style.width = newWidth + 'px';
-    canvas.style.height = newHeight + 'px';
-  }
-
-  window.addEventListener('load', resizeUnityCanvas);
-  window.addEventListener('resize', resizeUnityCanvas);
-  window.addEventListener('orientationchange', resizeUnityCanvas);
-})();
-</script>
-
-<script defer="" src="./v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;0a7c7133c4e648d097398256f74bcfc1&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
-
-
-<script src="./cb68df8b6138accfef441a97d929e28f.framework.js.br"></script></body></html>
+        // Resize Logic
+        function resizeCanvas() {
+            const aspect = 16 / 9;
+            let w = window.innerWidth;
+            let h = window.innerHeight;
+            if (w / h > aspect) {
+                w = h * aspect;
+            } else {
+                h = w / aspect;
+            }
+            canvas.style.width = w + "px";
+            canvas.style.height = h + "px";
+        }
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('load', resizeCanvas);
+    </script>
+</body>
+</html>
